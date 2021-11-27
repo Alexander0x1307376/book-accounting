@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToMany, JoinTable, ManyToOne } from "typeorm";
+import { Entity, Column, ManyToMany, ManyToOne } from "typeorm";
 import Model from "./Model";
 import { Author } from "./Author";
 import { Category } from "./Category";
@@ -22,8 +22,9 @@ export class Book extends Model {
   @ManyToOne(() => Category, category => category.books)
   category: Category
 
-  @ManyToMany(() => Author, author => author.books)
-  @JoinTable()
+  @ManyToMany(() => Author, author => author.books, {
+    onDelete: 'SET NULL'
+  })
   authors: Author[]
 
 }

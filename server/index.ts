@@ -7,7 +7,7 @@ import errorMiddleware from './middlewares/errorMiddleware';
 import { createConnection } from 'typeorm';
 
 
-const app = express();
+export const app = express();
 
 const port = process.env.PORT || 8000;
 

@@ -1,4 +1,4 @@
-import { Entity, Column, Unique, ManyToMany } from "typeorm";
+import { Entity, Column, Unique, ManyToMany, JoinTable } from "typeorm";
 import Model from "./Model";
 import { Book } from "./Book";
 
@@ -23,6 +23,9 @@ export class Author extends Model {
   imageUrl: string
 
   @ManyToMany(() => Book, book => book.authors)
+  @JoinTable({
+    name: 'authors_books'
+  })
   books: Book[]
   
 }

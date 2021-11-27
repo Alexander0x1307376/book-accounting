@@ -6,19 +6,16 @@ import { Category } from "../../entity/Category";
 import { Book } from "../../entity/Book";
 
 import { v4 } from "uuid";
-import { isNumber, random, sample, shuffle } from "lodash";
+import { isNumber, map, random, sample, shuffle } from "lodash";
 
 
 const flatCategories = (categories: Category[]) => {
-
-  return categories.reduce((acc, category) => {
-    const result = [category];
-    if (category.children)
-      result.push(...flatCategories(category.children));
-    
-    return acc.concat(result);
+  const result: Category[] = categories.reduce((acc, category) => {
+    return category.children.length 
+    ? acc.concat(category, flatCategories(category.children))
+    : []
   }, [] as Category[]);
-
+  return result;
 }
 
 const generateCategories = async (quantity: number, childQantity: number | (() => number), deep = 1) => {
@@ -34,9 +31,6 @@ const generateCategories = async (quantity: number, childQantity: number | (() =
       ? await generateCategories(childCount, childQantity, deep - 1)
       : [];
 
-    // console.log('')
-    // console.log(`deep=${deep}, count=${childCount}, cond=${(deep > 1 && childCount)}`);
-    // console.log('children!!', children);
 
     categories[i].children = children;
   }
