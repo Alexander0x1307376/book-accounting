@@ -11,7 +11,7 @@ export const getList = async (page: number, rowsPerPage = 10) => {
   return await getPaginatedList(
     getRepository(Author), 
     {
-      select: ['uuid', 'name', 'createdAt', 'updatedAt'],
+      select: ['uuid', 'name', 'birthDate', 'deathDate', 'createdAt', 'updatedAt'],
       page, 
       rowsPerPage, 
       order: {

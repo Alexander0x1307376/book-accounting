@@ -14,9 +14,9 @@ const Main: FC = () => {
           style={{ height: '100%', borderRight: 0 }}
         >
           <Menu.Item key="1"><Link to="/">Главная</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/authors">Авторы</Link></Menu.Item>
-          <Menu.Item key="3"><Link to="/books">Книги</Link></Menu.Item>
-          <Menu.Item key="4"><Link to="/categories">Категории</Link></Menu.Item>
+          <Menu.Item key="2"><Link to="/authors/1">Авторы</Link></Menu.Item>
+          <Menu.Item key="3"><Link to="/books/1">Книги</Link></Menu.Item>
+          <Menu.Item key="4"><Link to="/categories/1">Категории</Link></Menu.Item>
         </Menu>
       </Sider>
       <Layout style={{ padding: '0 24px 24px' }}>
