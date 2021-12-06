@@ -11,12 +11,29 @@ export type BaseRecord = {
   updatedAt: string,
 }
 
+// автор
+
+// ответ сервера - запись автора
 export type AuthorRecord = {
   name: string,
   birthDate: string,
   deathDate: string,
   description?: string
 } & BaseRecord;
+
+// ответ сервера - записи автора с пагинацией
+export type AuthorListResponse = Pagination<AuthorRecord>
+
+// данные ввода при создании записи
+export interface AuthorInput {
+  name: string;
+  birthDate: string;
+  deathDate: string;
+  description: string;
+}
+
+
+// книги
 
 export type BookRecord = {
   name: string,
@@ -25,12 +42,14 @@ export type BookRecord = {
   category: string
 } & BaseRecord;
 
+export type BookListResponse = Pagination<BookRecord>
+
+// категории
+
 export type CategoryRecord = {
   name: string,
   description: string
 } & BaseRecord
 
-
-export type AuthorListResponse = Pagination<AuthorRecord>
-export type BookListResponse = Pagination<BookRecord>
 export type CategoryListResponse = Pagination<CategoryRecord>
+

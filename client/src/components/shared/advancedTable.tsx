@@ -86,7 +86,7 @@ const AdvancedTable: React.FC<AdvancedTableProps> = ({
         showIcon
         description={error.details}
         action={
-          <Button danger onClick={() => error.onRetryClick}>Перезагрузить</Button>
+          <Button danger onClick={error.onRetryClick}>Перезагрузить</Button>
         }
       />
       : <Table 

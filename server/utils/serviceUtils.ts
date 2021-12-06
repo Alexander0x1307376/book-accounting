@@ -19,7 +19,7 @@ export const getPaginatedList = async <T extends BaseEntity>(
 ): Promise<PaginationData<T>> => {
   const {page, rowsPerPage, select, order} = options;
 
-  const offset = page === 1 ? 1 : (page - 1) * rowsPerPage;
+  const offset = page === 1 ? 0 : (page - 1) * rowsPerPage;
 
   const [list, total] = await repository.findAndCount({
     order,

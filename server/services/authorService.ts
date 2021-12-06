@@ -15,7 +15,7 @@ export const getList = async (page: number, rowsPerPage = 10) => {
       page, 
       rowsPerPage, 
       order: {
-        createdAt: 'ASC'
+        updatedAt: 'DESC'
       }
     }
   );

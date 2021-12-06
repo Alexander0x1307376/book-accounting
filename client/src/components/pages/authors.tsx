@@ -2,6 +2,10 @@ import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthorsQuery } from '../../store/services/authorsApi';
 import AdvancedTable from '../shared/advancedTable';
+import { Divider, Row, Space, Typography } from 'antd';
+import ButtonRouterLink from '../shared/buttonRouterLink';
+const { Title } = Typography;
+
 
 const columns = [
   {
@@ -24,6 +28,16 @@ const columns = [
     dataIndex: 'deathDate',
     title: 'Дата смерти'
   },
+  {
+    key: 'createdAt',
+    dataIndex: 'createdAt',
+    title: 'Дата создания'
+  },
+  {
+    key: 'updatedAt',
+    dataIndex: 'updatedAt',
+    title: 'Дата обновления'
+  },
 ];
 
 const Authors: FC = () => {
@@ -32,16 +46,28 @@ const Authors: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(page ? +page : 1);
   const { data, error, isLoading, refetch } = useAuthorsQuery(currentPage);
 
-  return (
+  const requestError = error as any;
+
+  return (<>
+    <Title>Список авторов</Title>
+    <Row justify="start">
+      <Space>
+        <ButtonRouterLink to="/author/create" type="primary">
+          Добавить автора
+        </ButtonRouterLink>
+      </Space>
+      <Divider />
+    </Row>
     <AdvancedTable
       recordIdentifier='uuid'
       headers={columns}
       rowsList={data?.list || []}
       loading={isLoading}
-      error={error ? {
+      error={requestError ? {
         title: 'Ошибка при получении данных авторов',
-        details: 'Ошибка',
+        details: requestError.data.message,
         onRetryClick: () => {
+          console.log(error);
           refetch();
         }
       } : undefined}
@@ -65,7 +91,7 @@ const Authors: FC = () => {
         cancelText: 'Отмена'
       }}
     />
-  )
+  </>)
 }
 
 export default Authors
