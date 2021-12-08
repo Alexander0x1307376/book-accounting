@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, Button, Modal, ModalProps, Table } from "antd";
+import React from "react";
+import { Alert, Button,  Table } from "antd";
 import RecordActionButtons, { RecordActionButtonsProps } from "./recordActionButtons";
 
 type Headers = {
@@ -12,38 +12,41 @@ export interface AdvancedTableProps {
   headers: Headers;
   rowsList: any;
   loading: boolean;
-  recordIdentifier?: string,
+  recordIdentifier?: string;
+
   error?: {
     title: string;
     details: string;
     onRetryClick: () => void
   };
+
   pagination: {
     currentPage: number,
     pageSize: number,
     total: number,
     onChange: (page: number) => void
   };
-  rowActions: {
-    detailsLink: (identifier: string) => string,
-    editLink: (identifier: string) => string,
-    deleteLink: (identifier: string) => string,
+
+  actionLinks?: {
+    detailsLink?: (id: string) => string,
+    editLink?: (id: string) => string,
+    deleteLink?: (id: string) => string,
   };
-  deleteModalWindow: {
-    title: string;
-    okText: string;
-    cancelText: string;
+  actionClickHandlers?: {
+    detailsClick?: (id: string) => void,
+    editClick?: (id: string) => void,
+    deleteClick?: (id: string) => void,
   };
 }
 
-const AdvancedTable: React.FC<AdvancedTableProps> = ({ 
+const NewAdvancedTable: React.FC<AdvancedTableProps> = ({ 
   rowsList,
   error,
   loading,
   pagination,
   headers, 
-  rowActions, 
-  deleteModalWindow,
+  actionLinks, 
+  actionClickHandlers,
   recordIdentifier = "id"
 }) => {
 
@@ -52,30 +55,17 @@ const AdvancedTable: React.FC<AdvancedTableProps> = ({
     key: "action",
     render: (text: any, record: any) => {
       const actionButtonProps: RecordActionButtonsProps = {
-        detailsLink: rowActions.detailsLink(record[recordIdentifier]),
-        editLink: rowActions.editLink(record[recordIdentifier]),
-        deleteLink: rowActions.deleteLink(record[recordIdentifier]),
-        onDeleteLinkClick: () => setIsModalVisible(true),
+        detailsLink: actionLinks?.detailsLink?.(record[recordIdentifier]) || undefined,
+        editLink: actionLinks?.editLink?.(record[recordIdentifier]) || undefined,
+        deleteLink: actionLinks?.deleteLink?.(record[recordIdentifier]) || undefined,
+        onDeleteLinkClick: () => actionClickHandlers?.deleteClick?.(record[recordIdentifier]),
+        onDetailsLinkClick: () => actionClickHandlers?.detailsClick?.(record[recordIdentifier]),
+        onEditLinkClick: () => actionClickHandlers?.editClick?.(record[recordIdentifier]),
       };
       const actionButtons = <RecordActionButtons {...actionButtonProps} />;
       return actionButtons;
     },
   };
-
-  //#region модальное окно
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const modalViewData: ModalProps = {
-    title: deleteModalWindow.title,
-    okText: deleteModalWindow.okText,
-    cancelText: deleteModalWindow.cancelText,
-    onOk: () => {
-      setIsModalVisible(false);
-    },
-    onCancel: () => {
-      setIsModalVisible(false);
-    },
-  };
-  //#endregion
 
   return <>
     {
@@ -102,10 +92,7 @@ const AdvancedTable: React.FC<AdvancedTableProps> = ({
         }}
       />
     }
-    <Modal visible={isModalVisible} {...modalViewData}>
-      <p>Удалить запись?</p>
-    </Modal>
   </>
 };
 
-export default AdvancedTable;
+export default NewAdvancedTable;

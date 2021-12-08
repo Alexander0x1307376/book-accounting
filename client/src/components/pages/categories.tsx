@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCategoriesQuery } from '../../store/services/categoriesApi';
-import AdvancedTable from '../shared/advancedTable';
+import CrudList from '../shared/crudList';
 
 const columns = [
   {
@@ -22,40 +22,44 @@ const Categories: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(page ? +page : 1);
   const { data, error, isLoading, refetch } = useCategoriesQuery(currentPage);
 
-  return (
-    <AdvancedTable
-      recordIdentifier='uuid'
-      headers={columns}
-      rowsList={data?.list || []}
-      loading={isLoading}
-      error={error ? {
-        title: 'Ошибка при получении списка категорий',
-        details: 'Ошибка',
-        onRetryClick: () => {
-          refetch();
-        }
-      } : undefined}
-      pagination={{
-        currentPage: data?.page || 1,
-        pageSize: data?.rowsPerPage || 1,
-        total: data?.total || 1,
-        onChange: (changedPage) => {
-          window.history.replaceState(null, '', `${changedPage}`);
-          setCurrentPage(changedPage);
-        }
-      }}
-      rowActions={{
-        detailsLink: identifier => `/category/${identifier}`,
-        editLink: identifier => `/category/${identifier}/edit`,
-        deleteLink: identifier => `/category/${identifier}/delete`
-      }}
-      deleteModalWindow={{
-        title: 'Удаление категории',
-        okText: 'Удалить',
-        cancelText: 'Отмена'
-      }}
-    />
-  )
+  const requestError = error as any;
+
+  return (<CrudList
+    title="Список категорий"
+    createLink="/category/create"
+    createButtonText="Добавить категорию"
+
+    tableHeaders={columns}
+    isLoading={isLoading}
+    data={data?.list || []}
+    pagination={{
+      currentPage: data?.page || 1,
+      pageSize: data?.rowsPerPage || 1,
+      total: data?.total || 1,
+      onChange: (changedPage) => {
+        window.history.replaceState(null, '', `${changedPage}`);
+        setCurrentPage(changedPage);
+      }
+    }}
+    getListError={requestError ? {
+      title: 'Ошибка при получении данных категорий',
+      details: requestError.data.message,
+      onRetryClick: () => {
+        console.log(error);
+        refetch();
+      }
+    } : undefined}
+    actionLinks={{
+      detailsLink: id => `/category/${id}`,
+      editLink: id => `/category/${id}/edit`,
+      deleteLink: id => `/category/${id}/delete`
+    }}
+    actionClickHandlers={{
+      deleteClick: (id) => { console.log('DELETED', id) },
+      editClick: (id) => { console.log('EDITED', id) },
+      detailsClick: (id) => { console.log('DETAILS', id) },
+    }}
+  />);
 }
 
 export default Categories

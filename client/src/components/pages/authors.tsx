@@ -1,18 +1,10 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthorsQuery } from '../../store/services/authorsApi';
-import AdvancedTable from '../shared/advancedTable';
-import { Divider, Row, Space, Typography } from 'antd';
-import ButtonRouterLink from '../shared/buttonRouterLink';
-const { Title } = Typography;
+import CrudList from '../shared/crudList';
 
 
 const columns = [
-  {
-    key: 'uuid',
-    dataIndex: 'uuid',
-    title: 'ID'
-  },
   {
     key: 'name',
     dataIndex: 'name',
@@ -48,50 +40,42 @@ const Authors: FC = () => {
 
   const requestError = error as any;
 
-  return (<>
-    <Title>Список авторов</Title>
-    <Row justify="start">
-      <Space>
-        <ButtonRouterLink to="/author/create" type="primary">
-          Добавить автора
-        </ButtonRouterLink>
-      </Space>
-      <Divider />
-    </Row>
-    <AdvancedTable
-      recordIdentifier='uuid'
-      headers={columns}
-      rowsList={data?.list || []}
-      loading={isLoading}
-      error={requestError ? {
-        title: 'Ошибка при получении данных авторов',
-        details: requestError.data.message,
-        onRetryClick: () => {
-          console.log(error);
-          refetch();
-        }
-      } : undefined}
-      pagination={{
-        currentPage: data?.page || 1,
-        pageSize: data?.rowsPerPage || 1,
-        total: data?.total || 1,
-        onChange: (changedPage) => {
-          window.history.replaceState(null, '', `${changedPage}`);
-          setCurrentPage(changedPage);
-        }
-      }}
-      rowActions={{
-        detailsLink: identifier => `/author/${identifier}`,
-        editLink: identifier => `/author/${identifier}/edit`,
-        deleteLink: identifier => `/author/${identifier}/delete`
-      }}
-      deleteModalWindow={{
-        title: 'Удаление автора',
-        okText: 'Удалить',
-        cancelText: 'Отмена'
-      }}
-    />
-  </>)
+  return (<CrudList 
+    title="Список авторов"
+    createLink="/author/create"
+    createButtonText="Добавить автора"
+
+    tableHeaders={columns}
+    isLoading={isLoading}
+    data={data?.list || []}
+    pagination={{
+      currentPage: data?.page || 1,
+      pageSize: data?.rowsPerPage || 1,
+      total: data?.total || 1,
+      onChange: (changedPage) => {
+        window.history.replaceState(null, '', `${changedPage}`);
+        setCurrentPage(changedPage);
+      }
+    }}
+    getListError={requestError ? {
+      title: 'Ошибка при получении данных авторов',
+      details: requestError.data.message,
+      onRetryClick: () => {
+        console.log(error);
+        refetch();
+      }
+    } : undefined}
+    actionLinks={{
+      detailsLink: id => `/author/${id}`,
+      editLink: id => `/author/${id}/edit`,
+      deleteLink: id => `/author/${id}/delete`
+    }}
+    actionClickHandlers={{
+      deleteClick: (id) => {console.log('DELETED', id)},
+      editClick: (id) => { console.log('EDITED', id)},
+      detailsClick: (id) => { console.log('DETAILS', id)},
+    }}
+  />);
 }
 
 export default Authors
