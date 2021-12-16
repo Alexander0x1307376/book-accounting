@@ -10,6 +10,8 @@ import Dashboard from '../components/pages/dashboard';
 import Login from '../components/layouts/login';
 import AuthorCreate from '../components/pages/authorCreate';
 import AuthorEdit from '../components/pages/authorEdit';
+import BookCreate from '../components/pages/bookCreate';
+import CategoryCreate from '../components/pages/categoryCreate';
 
 export const routes: RouteObject[] = [
   {
@@ -25,6 +27,7 @@ export const routes: RouteObject[] = [
         path: '/',
         element: <Dashboard />,
       },
+      // Автор
       {
         path: 'authors/:page',
         element: <Authors />,
@@ -41,19 +44,27 @@ export const routes: RouteObject[] = [
         path: 'author/:id',
         element: <AuthorDetails />,
       },
-
+      // Книги
       {
         path: 'books/:page',
         element: <Books />,
       },
       {
+        path: 'book/create',
+        element: <BookCreate />,
+      },
+      {
         path: 'book/:id',
         element: <BookDetails />,
       },
-
+      // Категории
       {
         path: 'categories/:page',
         element: <Categories />,
+      },
+      {
+        path: 'category/create',
+        element: <CategoryCreate />,
       },
       {
         path: 'category/:id',

@@ -1,11 +1,11 @@
 import React from "react";
 import ButtonRouterLink from "./buttonRouterLink";
 import { EditOutlined, DeleteOutlined, FileTextOutlined } from "@ant-design/icons";
-import { Space } from "antd";
+import { Button, Space } from "antd";
 
 export interface RecordActionButtonsProps {
-  editLink: string;
-  deleteLink: string;
+  editLink?: string;
+  deleteLink?: string;
   detailsLink?: string;
   onDetailsLinkClick?: () => void;
   onEditLinkClick?: () => void;
@@ -43,24 +43,55 @@ const RecordActionButtons: React.FC<RecordActionButtonsProps> = ({
   return (
     <Space size="middle">
       {
-        detailsLink ?
-          (<ButtonRouterLink to={detailsLink || ''} onClick={handleDetailsLinkClick} type="ghost">
-            <FileTextOutlined />
-          </ButtonRouterLink>) : null
+        detailsLink 
+        ? <RenderButton to={detailsLink} onClick={handleDetailsLinkClick} type="ghost">
+          <FileTextOutlined />
+        </RenderButton>
+        : null
       }
-      <ButtonRouterLink to={editLink} onClick={handleEditLinkClick} type="primary">
+      <RenderButton 
+        to={editLink} 
+        onClick={handleEditLinkClick} 
+        type="primary"
+      >
         <EditOutlined />
-      </ButtonRouterLink>
-      <ButtonRouterLink
+      </RenderButton>
+      
+      <RenderButton
         to={deleteLink}
         type="primary"
         danger
         onClick={handleDeleteLinkClick}
       >
         <DeleteOutlined />
-      </ButtonRouterLink>
+      </RenderButton>
     </Space>
   );
 };
+
+
+interface RenderButtonProps {
+  children: React.ReactNode,
+  type?: "primary" | "ghost" | "dashed" | "link" | "text" | "default",
+  danger?: boolean,
+  to?: string,
+  onClick: (event: any) => void
+}
+
+const RenderButton: React.FC<RenderButtonProps> = ({ 
+  to, onClick, children, danger, type = "primary"}) => {
+  return (
+    !to
+    ? <Button type={type} onClick={onClick} danger={danger}>
+      {children}
+    </Button>
+
+    : <ButtonRouterLink to={to} onClick={onClick} type={type} danger={danger}>
+      {children}
+    </ButtonRouterLink>
+  );
+}
+
+
 
 export default RecordActionButtons;

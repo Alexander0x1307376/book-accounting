@@ -8,19 +8,29 @@ export interface DataService<PostData, DataItem, ListData> {
   getList: (page: number) => Promise<ListData>,
 }
 
+export type ControllerMethod = (req: Request, res: Response, next: NextFunction) => void | Promise<void>
+
 export interface OverrideMethods {
-  create?: (req: Request, res: Response, next: NextFunction) => void | Promise<void>,
-  edit?: (req: Request, res: Response, next: NextFunction) => void | Promise<void>,
-  remove?: (req: Request, res: Response, next: NextFunction) => void | Promise<void>,
-  show?: (req: Request, res: Response, next: NextFunction) => void | Promise<void>,
-  list?: (req: Request, res: Response, next: NextFunction) => void | Promise<void>,
+  create?: ControllerMethod,
+  edit?: ControllerMethod,
+  remove?: ControllerMethod,
+  show?: ControllerMethod,
+  list?: ControllerMethod
 }
 
 export const createCrudController = <
   PostData, DataItem, ListData
-  >(service: DataService<PostData, DataItem, ListData>, overrided?: OverrideMethods) => {
+  >(service: DataService<PostData, DataItem, ListData>, 
+    config?: {
+      overrided?: OverrideMethods,
+      // addictionalMethods?: Record<string, ControllerMethod>
+    }
+) => {
 
-  return {
+  const overrided = config?.overrided;
+  // const addictionalMethods = config?.addictionalMethods;
+
+  const controllerMethods = {
 
     list: overrided?.list 
     ? overrided.list 
@@ -81,9 +91,10 @@ export const createCrudController = <
       } catch (e) {
         next(e);
       }
-    },
+    }
+  };
 
-  }
+  return controllerMethods;
 }
 
 export default createCrudController;

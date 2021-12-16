@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Alert } from "antd";
-import EditAuthorForm from "../shared/editAuthorForm";
+import EditAuthorForm from "../shared/forms/editAuthorForm";
 import { AuthorInput } from "../../types";
 import { useAuthorDetailsQuery, useEditAuthorMutation } from "../../store/services/authorsApi";
 import { useNavigate, useParams } from 'react-router-dom';

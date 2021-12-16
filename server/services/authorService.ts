@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, Like } from "typeorm";
 import { Author } from "../entity/Author";
 import { AuthorPostData } from "../types";
 import { getPaginatedList } from "../utils/serviceUtils";
@@ -51,14 +51,27 @@ export const remove = async (id: string) => {
   return deletingAuthor;
 }
 
+export const search = async (search: string, limit: number = 5) => {
+  const result = await Author.find({
+      select: ['uuid', 'name'],
+      where: {
+        name: Like(`%${search}%`)
+      },
+      take: limit
+
+  });
+  return await result;
+}
 
 
-const authorService: DataService<AuthorPostData, Author, PaginationData<Author>> = {
+const authorService: DataService<AuthorPostData, Author, PaginationData<Author>>
+& { search: typeof search } = {
   create,
   edit,
   getItem,
   getList,
-  remove
+  remove,
+  search
 }
 
 export default authorService;

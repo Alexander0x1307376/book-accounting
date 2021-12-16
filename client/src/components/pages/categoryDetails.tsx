@@ -7,7 +7,7 @@ const { Item } = Descriptions;
 
 const CategoryDetails: FC = () => {
   const { id } = useParams<any>();
-  const { data, isLoading } = useCategoryDetailsQuery(id);
+  const { data, isLoading } = useCategoryDetailsQuery(id!);
 
   const extra = <ButtonRouterLink to={`/category/${id}/edit`} type='primary'>
     Изменить

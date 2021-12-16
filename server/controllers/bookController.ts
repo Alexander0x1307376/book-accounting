@@ -4,13 +4,15 @@ import * as bookService from '../services/bookService';
 import { BookPostData } from '../types';
 
 
-export default createCrudController(bookService, {
+export default createCrudController(bookService, { overrided: {
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = <BookPostData & { authorsId: string }>req.body;
       const foreignFields = {
-        categoryId: data.categoryId,
-        authorsId: data.authorsId.split(',').map((item: string) => item.trim()),
+        categoryId: data.categoryId || '',
+        authorsId: data.authorsId?.length
+          ? data.authorsId.split(',').map((item: string) => item.trim())
+          : []
       }
 
       const result = await bookService.create(Object.assign(data, foreignFields));
@@ -35,5 +37,5 @@ export default createCrudController(bookService, {
       next(e);
     }
   }
-}
+}}
 );

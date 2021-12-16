@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input, Button, DatePicker } from "antd";
-import { AuthorInput } from "../../types";
+import { AuthorInput } from "../../../types";
 import moment from 'moment';
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
@@ -9,7 +9,6 @@ interface EditAuthorFormProps {
   recordData?: Partial<AuthorInput>;
   onSubmit: (values: Partial<AuthorInput>) => void;
   formLayout?: LayoutType;
-  form?: any;
   hiddenSubmitButton?: boolean
 }
 
@@ -19,7 +18,6 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
   recordData,
   onSubmit,
   formLayout,
-  form
 }: EditAuthorFormProps) => {
 
   const layout = (formLayout === "horizontal") ? {
@@ -30,13 +28,16 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
     wrapperCol: { offset: 3, span: 16 },
   } : undefined;
 
+
   const onFinish = (values: any): void => {
     onSubmit({...values,
       birthDate: values.birthDate ? values.birthDate.format(dateFormat) : '',
       deathDate: values.deathDate ? values.deathDate.format(dateFormat) : ''
     } as Partial<AuthorInput>);
   };
-  const onFinishFailed = () => { };
+
+
+
 
   const initialValues = recordData ? {
     name: recordData.name,
@@ -45,14 +46,13 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
     deathDate: moment(recordData.deathDate)
   } : undefined;
 
+
   return (
     <Form
-      form={form}
       {...layout}
       layout={formLayout || "horizontal"}
       initialValues={initialValues}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
     >
       <Form.Item
         label="Имя автора"

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { BookListResponse, BookRecord } from '../../types';
+import { BookInput, BookListResponse, BookRecord } from '../../types';
 
 export const booksApi = createApi({
   reducerPath: 'booksApi',
@@ -11,17 +11,28 @@ export const booksApi = createApi({
       query: (page: number) => ({
         url: `books/${page}`,
         method: 'GET'
-      })
+      }),
+      providesTags: ['Book']
     }),
 
     bookDetails: build.query<BookRecord, any>({
       query: (lobbyUuid: string) => ({
         url: `book/${lobbyUuid}`,
         method: 'GET'
-      })
-    })
+      }),
+      providesTags: ['Book']
+    }),
+
+    createBook: build.mutation<BookInput, any>({
+      query: (bookInput: BookInput) => ({
+        url: `book/create`,
+        method: 'POST',
+        body: bookInput
+      }),
+      invalidatesTags: ['Book']
+    }),
   })
 });
 
-export const { useBooksQuery, useBookDetailsQuery } = booksApi;
+export const { useBooksQuery, useBookDetailsQuery, useCreateBookMutation } = booksApi;
 

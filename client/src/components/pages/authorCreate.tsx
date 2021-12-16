@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, Alert } from "antd";
-import EditAuthorForm from "../shared/editAuthorForm";
+import EditAuthorForm from "../shared/forms/editAuthorForm";
 import { AuthorInput } from "../../types";
 import { useCreateAuthorMutation } from "../../store/services/authorsApi";
 import { useNavigate } from 'react-router-dom';
@@ -9,16 +9,10 @@ const { Title } = Typography;
 const AuthorCreate: React.FC = () => {
 
   const [createAuthor, { isLoading, data, error }] = useCreateAuthorMutation();
-  
+  const navigate = useNavigate();
   const [displayError, setDisplayError] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
-
-  console.log(error)
-
   const handleSubmit = async (values: Partial<AuthorInput>) => {
-    console.log('createauthor', values);
     try {
       await createAuthor(values).unwrap();
       navigate('/authors/1');

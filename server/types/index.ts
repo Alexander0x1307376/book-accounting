@@ -38,8 +38,8 @@ export interface BookPostData {
   isbn: string,
   name: string,
   description: string,
-  categoryId: string,
-  authorsId: string[],
+  categoryId?: string,
+  authorsId?: string[],
   imageUrl?: string
 }
 

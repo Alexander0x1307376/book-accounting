@@ -16,7 +16,7 @@ export const getList = async (page: number, rowsPerPage = 10) => {
       page,
       rowsPerPage,
       order: {
-        createdAt: 'ASC'
+        createdAt: 'DESC'
       }
     }
   );
@@ -27,18 +27,25 @@ export const getItem = async (uuid: string) => {
   return author;
 }
 
-export const create = async (data: BookPostData) => {
+export const create = async ({name, isbn, description, categoryId, authorsId}: BookPostData) => {
 
-  const category = await Category.findOne({ uuid: data.categoryId}, {select: ['id']});
-  const authors = await Author.find({ 
-    select: ['id'],
-    where: { uuid: In(data.authorsId as string[]) }
-  });
+  console.log('catCreate', { name, description, categoryId, authorsId });
+
+  const category = categoryId
+    ? await Category.findOne({ uuid: categoryId}, {select: ['id']})
+    : undefined;
+
+  const authors = authorsId 
+    ? await Author.find({ 
+      select: ['id'],
+      where: { uuid: In(authorsId as string[]) }
+    })
+    : undefined;
 
   const book = Book.create({
-    name: data.name,
-    isbn: data.isbn,
-    description: data.description,
+    name,
+    isbn,
+    description,
     category,
     authors
   });
