@@ -30,6 +30,7 @@ export interface Category {
 
 export interface CategoryPostData {
   name: string,
+  parentId?: string,
   description: string,
 }
 

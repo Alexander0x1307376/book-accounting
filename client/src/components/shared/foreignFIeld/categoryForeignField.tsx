@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { useCategoriesSearchQuery } from "../../../store/services/categoriesApi";
+import { useCategoriesSearchQuery, useCreateCategoryMutation } from "../../../store/services/categoriesApi";
 import OneToManyField from "./oneToManyField";
 import CreateCategoryModal from "../modals/createCategoryModal";
 import CategoryListModal from "../modals/categoryListModal";
@@ -21,13 +21,17 @@ const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
   const [search, setSearch] = useState<string>('');
   const [throttledSearch, setThrottledSearch] = useState<string>('');
 
+
+  // хук записей поиска
   const { data } = useCategoriesSearchQuery(throttledSearch);
+
 
   // централизованный метод установления состояния записи
   const selectCategory = (id: string, name: string) => {
     setSearch(name);
     onChange?.(id);
   }
+
   
   // приведённые к правильной формы результаты поиска для поля автопоиска (?)
   const categoryRecords = useMemo(() => 
@@ -36,12 +40,36 @@ const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
       id: item.uuid,
       name: item.name
     })) 
-    : [], 
-    [data]);
+    : [], [data]
+  );
+
+
+  // создание категории
+  const [
+    createCategory, 
+    { 
+      isLoading: isCategoryCreating, 
+      data: createCategoryData, 
+      error: createCategoryError 
+    }
+  ] = useCreateCategoryMutation();
+
+  const handleSubmit = async (values: any) => {
+    try {
+      const result = await createCategory(values).unwrap();
+      selectCategory(result.uuid, result.name);
+      setCreateModalVisible(false);
+    } catch (e) {
+      console.log('ERROR!!!!', e);
+    }
+  };
+
+
 
   // видимости модальных окон
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [listVisible, setListVisible] = useState<boolean>(false);
+
 
   return <>
     <OneToManyField 
@@ -59,7 +87,7 @@ const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
     />
     <CreateCategoryModal
       visible={createModalVisible}
-      onSubmit={() => { }}
+      onSubmit={handleSubmit}
       onCancel={() => setCreateModalVisible(false)}
     />
     <CategoryListModal

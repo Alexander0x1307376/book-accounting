@@ -24,8 +24,17 @@ export const getItem = async (id: string) => {
   return category;
 }
 
-export const create = async (data: CategoryPostData) => {
-  const category = Category.create(data);
+export const create = async ({name, description, parentId}: CategoryPostData) => {
+
+  const parent = parentId
+    ? await Category.findOne({ uuid: parentId }, { select: ['id'] })
+    : undefined;
+
+  const category = Category.create({
+    name,
+    description,
+    parent
+  });
 
   await category.save();
   return category;

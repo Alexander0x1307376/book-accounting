@@ -29,8 +29,6 @@ export const getItem = async (uuid: string) => {
 
 export const create = async ({name, isbn, description, categoryId, authorsId}: BookPostData) => {
 
-  console.log('catCreate', { name, description, categoryId, authorsId });
-
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId}, {select: ['id']})
     : undefined;

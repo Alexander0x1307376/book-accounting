@@ -1,48 +1,28 @@
 import React from "react";
 import { BookInput } from "../../../types";
-import { Form, Input, Button } from "antd";
-import OneToManyField from "../foreignFIeld/oneToManyField";
+import { Form, Input, Button, FormInstance } from "antd";
 import CategoryForeignField from "../foreignFIeld/categoryForeignField";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 
 
-const data = [
-  {
-    id: '111',
-    name: 'История'
-  },
-  {
-    id: '222',
-    name: 'История России'
-  },
-  {
-    id: '333',
-    name: 'Химия'
-  },
-  {
-    id: '444',
-    name: 'История химии'
-  },
-  {
-    id: '555',
-    name: 'История химии для детей'
-  },
-]
-
-
-
 interface EditBookFormProps {
   recordData?: BookInput;
-  onSubmit: (values: BookInput) => void;
+  onSubmit?: (values: BookInput) => void;
   formLayout?: LayoutType;
+  withoutSubmitButton?: boolean;
+  form?: FormInstance<any>;
 }
+
 
 const EditBookForm: React.FC<EditBookFormProps> = ({
   recordData,
   onSubmit,
-  formLayout = "horizontal"
+  formLayout = "horizontal",
+  withoutSubmitButton,
+  form
 }) => {
+
 
   const layout = (formLayout === "horizontal") ? {
     labelCol: { span: 3 },
@@ -52,10 +32,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
     wrapperCol: { offset: 3, span: 16 },
   } : undefined;
 
-  const onFinish = (values: any): void => {
-    // onSubmit(values);
-    console.log(values)
-  }
+  const onFinish = (values: any): void => onSubmit?.(values);
 
   const initialValues = recordData ? {
     name: recordData.name,
@@ -68,6 +45,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
       layout={formLayout}
       initialValues={initialValues}
       onFinish={onFinish}
+      form={form}
     >
       <Form.Item
         label="Название книги"
@@ -94,11 +72,16 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
         <Input.TextArea />
       </Form.Item>
 
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Отправить
-        </Button>
-      </Form.Item>
+      {
+        !withoutSubmitButton
+          ? (<Form.Item {...tailLayout}>
+            <Button type="primary" htmlType="submit">
+              Отправить
+            </Button>
+          </Form.Item>) 
+        : null
+      }
+      
     </Form>
   );
 }

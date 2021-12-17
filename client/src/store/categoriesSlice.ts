@@ -26,8 +26,6 @@ export const categoriesSlice = createSlice({
   reducers: {
     insertCategories: (state, action: PayloadAction<{parentId?: string, children: CategoryRecord[]}>) => {
 
-      console.log('insertCategories', action.payload);
-
       const { parentId, children } = action.payload;
 
       // если батя указан
@@ -35,8 +33,6 @@ export const categoriesSlice = createSlice({
         // добавляем детей
         state.categories[parentId].children = action.payload.children.map(({uuid}) => uuid);
       }
-
-      
 
       // добавляем сами записи
       children.forEach(item => {

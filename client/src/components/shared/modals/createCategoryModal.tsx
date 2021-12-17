@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal, Button, Form, Input } from "antd";
-import CategoryForeignField from "../foreignFIeld/categoryForeignField";
+import { Modal, Button, Form } from "antd";
+import EditCategoryForm from "../forms/editCategoryForm";
 
 export interface CreateCategoryModalProps {
   visible: boolean;
@@ -11,16 +11,23 @@ export interface CreateCategoryModalProps {
 const CreateCategoryModal: React.FC<CreateCategoryModalProps> = ({
   visible,
   onSubmit,
-  onCancel
+  onCancel,
 }: CreateCategoryModalProps) => {
 
+  const [form] = Form.useForm();
 
   // при тыке по "Создать категорию"
-  const handleCreateCategory = () => {
-    
+  const handleCreateCategory = () => { 
+    form
+      .validateFields()
+      .then((values: any) => {
+        onSubmit(values);
+        form.resetFields();
+      })
+      .catch(info => {
+        console.log('Validate Failed:', info);
+      });
   }
-
-  const handleCancel = () => onCancel();
 
   return (
     <Modal 
@@ -30,26 +37,15 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = ({
       closable={false}
       footer={[
         <Button key="accept" type="primary" onClick={handleCreateCategory}>Создать категорию</Button>,
-        <Button key="cancel" onClick={handleCancel}>Отмена</Button>,
+        <Button key="cancel" onClick={onCancel}>Отмена</Button>,
       ]}
     >
-      <Form
-        layout="vertical"
-      >
-        <Form.Item
-          label="Имя категории"
-          name="name"
-          rules={[{ required: true, message: "Имя категории обязательно!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Родительская категория"
-          name="category"  
-        >
-          <CategoryForeignField withoutCreateButton/>
-        </Form.Item>
-      </Form>
+      <EditCategoryForm 
+        form={form}
+        onSubmit={onSubmit}
+        withoutSubmitButton
+        formLayout="vertical"
+      />
     </Modal>
   );
 }

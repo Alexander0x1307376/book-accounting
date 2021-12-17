@@ -8,7 +8,6 @@ import {
 } from "../../../store/services/categoriesApi";
 import TreeList, { TreeView } from "../treeList";
 import { Categories } from '../../../store/categoriesSlice';
-import { stringify } from "querystring";
 
 
 export interface CategoryListModalProps {
@@ -40,17 +39,17 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
       maskClosable={false}
       footer={[
         <Button 
-          key="cancel" 
-          onClick={onCancelClick}
-        >Отмена</Button>,
-        <Button 
           key="select" 
           disabled={!selectedId}
           type="primary" 
           onClick={() => {
             onSelectClick?.({ id: selectedId, name: selectedName})
           }}
-        >Выбрать</Button>
+        >Выбрать</Button>,
+        <Button
+          key="cancel"
+          onClick={onCancelClick}
+        >Отмена</Button>
       ]}
     >
       <TreeList 
@@ -60,35 +59,20 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
           fetch(key);
         }}
         onSelect={(id) => {
-          setSelectedId(id)
-          setSelectedName(categories[id].name)
+          if(id) {
+            setSelectedId(id);
+            setSelectedName(categories[id].name);
+          } else {
+            setSelectedId('');
+            setSelectedName('');
+          }
         }}
       />
     </Modal>
   );
 }
 
-// #region updateTree
-// list - древо верхнего уровня
-// key - id ноды, куда пихаем детей
-// children - сами дети
-// древо пересобираем полностью
-// const updateTreeData = (list: any, key: string, children: any) => {
-//   return list.map((node: any) => {
-//     if (node.key === key) {
-//       return { ...node, children };
-//     }
-//     if (node.children) {
-//       return { ...node, children: updateTreeData(node.children, key, children) };
-//     }
-
-//     return node;
-//   });
-// }
-//#endregion
-
 const generateTreeDataView = (data: Categories, parentValue?: string): TreeView[] => {
-  console.log(`generateTreeDataView - parentId: ${parentValue}`);
   const result: TreeView[] = [];
 
   for (let key in data) {
@@ -108,7 +92,6 @@ const generateTreeDataView = (data: Categories, parentValue?: string): TreeView[
     }
   }
 
-  console.log('res', result);
   return result;
 };
 

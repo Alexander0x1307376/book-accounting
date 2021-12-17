@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { CategoryListResponse, CategoryRecord } from '../../types';
+import { CategoryInput, CategoryListResponse, CategoryRecord } from '../../types';
 import { insertCategories } from '../categoriesSlice';
 
 export const categoriesApi = createApi({
@@ -9,28 +9,31 @@ export const categoriesApi = createApi({
   endpoints: build => ({
 
     categories: build.query<CategoryListResponse, number>({
-      query: (page: number) => `categories/${page}`
+      query: (page: number) => `categories/${page}`,
+      providesTags: ['Category']
     }),
 
     categoryDetails: build.query<CategoryRecord, string>({
-      query: (lobbyUuid: string) => `category/${lobbyUuid}`
+      query: (lobbyUuid: string) => `category/${lobbyUuid}`,
+      providesTags: ['Category']
     }),
 
     categoriesSearch: build.query<CategoryRecord[], string>({
-      query: (search: string) => `categories/search?search=${search}`
+      query: (search: string) => `categories/search?search=${search}`,
+      providesTags: ['Category']
     }),
 
     categoriesRoots: build.query<CategoryRecord[], void>({
       query: () => `categories/root`,
       onQueryStarted: async(id, { dispatch, queryFulfilled }) => {
         try {
-          // console.log('categories/root query')
           const { data } = await queryFulfilled;
           dispatch(insertCategories({children: data}));
         } catch (e) {
           console.log('ERROR!!!');
         }
-      }
+      },
+      providesTags: ['Category']
     }),
 
     categoryChildren: build.query<CategoryRecord[], string>({
@@ -38,8 +41,19 @@ export const categoriesApi = createApi({
       onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
         const { data } = await queryFulfilled;
         dispatch(insertCategories({parentId: id, children: data}))
-      }
-    })
+      },
+      providesTags: ['Category']
+    }),
+
+    createCategory: build.mutation<CategoryRecord, CategoryInput>({
+    // createCategory: build.mutation<CategoryInput, CategoryRecord>({
+      query: categoryInput => ({
+        url: `category/create`,
+        method: 'POST',
+        body: categoryInput
+      }),
+      invalidatesTags: ['Category']
+    }),
 
   })
 });
@@ -50,6 +64,8 @@ export const {
   useCategoriesSearchQuery,
   useCategoriesRootsQuery,
   useCategoryChildrenQuery,
+
+  useCreateCategoryMutation,
 
   useLazyCategoryChildrenQuery,
 } = categoriesApi;
