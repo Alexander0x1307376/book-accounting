@@ -1,18 +1,18 @@
 import express from 'express';
-import * as userController from '../controllers/userController';
-import categoryController from '../controllers/categoryController';
-import bookController from '../controllers/bookController';
-import authorController from '../controllers/authorController';
+import userController from '../features/user/userController';
+import categoryController from '../features/category/categoryController';
+import bookController from '../features/book/bookController';
+import authorController from '../features/author/authorController';
 import authorValidationRules from '../validators/rules/authorRules';
 import validatorMiddleware from '../validators/validatorMiddleware'
 
 const router = express.Router();
 
-router.get('/users/:page', userController.list);
-router.post('/user/create', userController.create);
-router.post('/user/:id/edit', userController.edit);
-router.post('/user/:id/delete', userController.remove);
-router.get('/user/:id', userController.show);
+// router.get('/users/:page', userController.list);
+// router.post('/user/create', userController.create);
+// router.post('/user/:id/edit', userController.edit);
+// router.post('/user/:id/delete', userController.remove);
+// router.get('/user/:id', userController.show);
 
 router.get('/categories/root', categoryController.root);
 router.get('/categories/search', categoryController.search);

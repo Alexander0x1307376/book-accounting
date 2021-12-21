@@ -1,8 +1,7 @@
 import { getRepository, IsNull, Like } from "typeorm"
-import { Category } from "../entity/Category"
-import { DataService } from "../features/crudController/crudController"
-import { CategoryPostData } from "../types"
-import { getPaginatedList, PaginationData } from "../utils/serviceUtils"
+import { Category } from "../../entity/Category";
+import { CategoryPostData } from "./categoryTypes";
+import { getPaginatedList, PaginationData } from "../../utils/serviceUtils";
 
 export const getList = async (page: number, rowsPerPage = 10) => {
 
@@ -132,14 +131,7 @@ export const childCategories = async (parentId: string) => {
 }
 
 
-const categoryService: DataService<CategoryPostData, Category, PaginationData<Category>>
-  & { 
-    categoryWithBooks: typeof categoryWithBooks, 
-    childCategories: typeof childCategories, 
-    rootCategories: typeof rootCategories,
-    search: typeof search,
-  }
- = {
+const categoryService = {
   create,
   edit,
   getItem,
@@ -148,7 +140,7 @@ const categoryService: DataService<CategoryPostData, Category, PaginationData<Ca
   search,
   rootCategories,
   childCategories,
-  categoryWithBooks,
+  categoryWithBooks
 }
 
 export default categoryService;

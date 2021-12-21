@@ -1,19 +1,17 @@
 import { getRepository, Like } from "typeorm";
-import { Author } from "../entity/Author";
-import { AuthorPostData } from "../types";
-import { getPaginatedList } from "../utils/serviceUtils";
+import { Author } from "../../entity/Author";
+import { AuthorPostData } from "./authorTypes";
 
-import { DataService } from "../features/crudController/crudController";
-import { PaginationData } from "../utils/serviceUtils";
+import { PaginationData, getPaginatedList } from "../../utils/serviceUtils";
 
 export const getList = async (page: number, rowsPerPage = 10) => {
 
   return await getPaginatedList(
-    getRepository(Author), 
+    getRepository(Author),
     {
       select: ['uuid', 'name', 'birthDate', 'deathDate', 'createdAt', 'updatedAt'],
-      page, 
-      rowsPerPage, 
+      page,
+      rowsPerPage,
       order: {
         updatedAt: 'DESC'
       }
@@ -46,26 +44,25 @@ export const edit = async (id: string, data: AuthorPostData) => {
 }
 
 export const remove = async (id: string) => {
-  const deletingAuthor = await Author.findOneOrFail({uuid: id});
+  const deletingAuthor = await Author.findOneOrFail({ uuid: id });
   await Author.delete({ uuid: id });
   return deletingAuthor;
 }
 
 export const search = async (search: string, limit: number = 5) => {
   const result = await Author.find({
-      select: ['uuid', 'name'],
-      where: {
-        name: Like(`%${search}%`)
-      },
-      take: limit
+    select: ['uuid', 'name'],
+    where: {
+      name: Like(`%${search}%`)
+    },
+    take: limit
 
   });
   return await result;
 }
 
 
-const authorService: DataService<AuthorPostData, Author, PaginationData<Author>>
-& { search: typeof search } = {
+const authorService = {
   create,
   edit,
   getItem,
