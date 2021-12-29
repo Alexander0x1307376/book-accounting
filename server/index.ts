@@ -5,7 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import errorMiddleware from './middlewares/errorMiddleware';
 import { createConnection } from 'typeorm';
-
+import { queryParser } from 'express-query-parser';
 
 export const app = express();
 
@@ -15,12 +15,21 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(queryParser({
+  parseNull: true,
+  parseUndefined: true,
+  parseBoolean: true,
+  parseNumber: true
+}));
 app.use(router);
 app.use(errorMiddleware);
 
 const start = async () => {
   try {
-    app.listen(port, () => console.log(`server listening on port ${port}`));
+    app.listen(port, () => {
+      console.clear();
+      console.log(`server listening on port ${port}`)
+  });
   }
   catch (error) {
     console.error(error);

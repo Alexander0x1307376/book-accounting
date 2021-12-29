@@ -1,8 +1,8 @@
-import { getRepository, Like } from "typeorm";
+import { getRepository, ILike } from "typeorm";
 import { Author } from "../../entity/Author";
 import { AuthorPostData } from "./authorTypes";
 
-import { PaginationData, getPaginatedList } from "../../utils/serviceUtils";
+import { getPaginatedList } from "../../utils/serviceUtils";
 
 export const getList = async (page: number, rowsPerPage = 10) => {
 
@@ -35,11 +35,13 @@ export const create = async (data: AuthorPostData) => {
 }
 
 export const edit = async (id: string, data: AuthorPostData) => {
+
   const author = await Author.findOneOrFail({ uuid: id });
   Object.assign(author, data, {
-    birthDate: data.birthDate && new Date(data.birthDate),
-    deathDate: data.deathDate && new Date(data.deathDate)
+    birthDate: data.birthDate ? new Date(data.birthDate) : null,
+    deathDate: data.deathDate ? new Date(data.deathDate) : null
   });
+
   return await author.save();
 }
 
@@ -49,16 +51,15 @@ export const remove = async (id: string) => {
   return deletingAuthor;
 }
 
-export const search = async (search: string, limit: number = 5) => {
-  const result = await Author.find({
+export const search = async (search: string, limit: number = 5) => {  
+  const authors = await Author.find({
     select: ['uuid', 'name'],
     where: {
-      name: Like(`%${search}%`)
+      name: ILike(`%${search.toString()}%`)
     },
     take: limit
-
   });
-  return await result;
+  return authors;
 }
 
 

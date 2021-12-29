@@ -9,7 +9,7 @@ const { Title } = Typography;
 
 const BookCreate: React.FC = () => {
 
-  const [createAuthor, { isLoading, data, error }] = useCreateBookMutation();
+  const [createAuthor, { error }] = useCreateBookMutation();
   const navigate = useNavigate();
   const [displayError, setDisplayError] = useState<boolean>(false);
 

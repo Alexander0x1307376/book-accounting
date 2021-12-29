@@ -8,7 +8,7 @@ const { Item } = Descriptions;
 
 const AuthorDetails: FC = () => {
   const { id } = useParams<any>();
-  const { data, isLoading } = useAuthorDetailsQuery(id);
+  const { data, isLoading } = useAuthorDetailsQuery(id!);
 
   const extra = <ButtonRouterLink to={`/author/${id}/edit`} type='primary'>
     Изменить

@@ -7,24 +7,39 @@ export const authorsApi = createApi({
   tagTypes: ['Author'],
   endpoints: build => ({
 
-    authors: build.query<AuthorListResponse, any>({
-      query: (page: number) => ({
+
+    // query < response , request >
+    authors: build.query<AuthorListResponse, number>({
+      query: (page) => ({
         url: `authors/${page}`,
         method: 'GET'
       }),
       providesTags: ['Author']
     }),
 
-    authorDetails: build.query<AuthorRecord, any>({
-      query: (lobbyUuid: string) => ({
-        url: `author/${lobbyUuid}`,
+    // query < response , request >
+    authorDetails: build.query<AuthorRecord, string>({
+      query: (uuid) => ({
+        url: `author/${uuid}`,
         method: 'GET'
       }),
       providesTags: ['Author']
     }),
 
-    createAuthor: build.mutation<AuthorInput, any>({
-      query: (authorInput: AuthorInput) => ({
+    // query < response , request >
+    authorSearch: build.query<AuthorRecord[], string>({
+      // query: (search) => `authors/search?search=${search}`,
+      query: (search) => ({
+        url: `authors/search`,
+        method: 'GET',
+        params: { search }
+      }),
+      providesTags: ['Author']
+    }),
+
+    // query < response , request >
+    createAuthor: build.mutation<any, AuthorInput>({
+      query: (authorInput) => ({
         url: `author/create`,
         method: 'POST',
         body: authorInput
@@ -32,7 +47,8 @@ export const authorsApi = createApi({
       invalidatesTags: ['Author']
     }),
 
-    editAuthor: build.mutation<{id: string, data: AuthorInput}, any>({
+    // mutation< response, request >
+    editAuthor: build.mutation<any, { id: string, data: AuthorInput }>({
       query: ({id, data}) => ({
         url: `author/${id}/edit`,
         method: 'POST',
@@ -47,6 +63,7 @@ export const {
   useAuthorsQuery, 
   useAuthorDetailsQuery, 
   useCreateAuthorMutation, 
-  useEditAuthorMutation 
+  useEditAuthorMutation,
+  useAuthorSearchQuery
 } = authorsApi;
 

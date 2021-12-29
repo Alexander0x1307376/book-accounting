@@ -1,13 +1,14 @@
-import React from "react";
-import { BookInput } from "../../../types";
+import React, { useMemo } from "react";
+import { BookInput, FullBookInput } from "../../../types";
 import { Form, Input, Button, FormInstance } from "antd";
-import CategoryForeignField from "../foreignFIeld/categoryForeignField";
+import CategoryInput from "../foreignField/categoryInput";
+import AuthorsInput from "../foreignField/authorsInput";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 
 
 interface EditBookFormProps {
-  recordData?: BookInput;
+  recordData?: FullBookInput;
   onSubmit?: (values: BookInput) => void;
   formLayout?: LayoutType;
   withoutSubmitButton?: boolean;
@@ -32,12 +33,28 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
     wrapperCol: { offset: 3, span: 16 },
   } : undefined;
 
-  const onFinish = (values: any): void => onSubmit?.(values);
+  const onFinish = (values: any): void => {
+    onSubmit?.({
+      isbn: values.isbn,
+      name: values.name,
+      description: values.description,
+      categoryId: values.category.value,
+      authorsIds: values.authors.map(({ value }: any) => value)
+    })
+  };
 
-  const initialValues = recordData ? {
-    name: recordData.name,
-    description: recordData.description,
-  } : undefined;
+  const initialValues = useMemo(() => ({
+    ...recordData,
+    category: {
+      value: recordData?.category?.uuid,
+      label: recordData?.category?.name,
+    },
+    authors: recordData?.authors?.map(({uuid, name}) => ({
+      value: uuid,
+      label: name
+    })) || []
+  }), [recordData]);
+
 
   return (
     <Form
@@ -65,7 +82,13 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
         label="Категория"
         name="category"
       >
-        <CategoryForeignField />
+        <CategoryInput />
+      </Form.Item>
+      <Form.Item
+        label="Авторы"
+        name="authors"
+      >
+        <AuthorsInput />
       </Form.Item>
 
       <Form.Item name="description" label="Описание">

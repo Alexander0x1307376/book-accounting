@@ -29,7 +29,7 @@ export interface AuthorInput {
   name: string;
   birthDate?: string;
   deathDate?: string;
-  description: string;
+  description?: string;
 }
 
 
@@ -37,13 +37,15 @@ export interface AuthorInput {
 
 export type BookRecord = {
   name: string;
+  isbn: string;
   description?: string;
-  authors?: string[];
-  category?: string;
+  authors?: Pick<AuthorRecord, "uuid" | "name">[];
+  category?: Pick<CategoryRecord, "uuid" | "name">;
 } & BaseRecord;
 
 export type BookListResponse = Pagination<BookRecord>
 
+// ввод, что отправляется на сервер
 export interface BookInput {
   name: string;
   isbn: string;
@@ -51,6 +53,22 @@ export interface BookInput {
   categoryId?: string;
   authorsIds?: string[];
 }
+
+// данные ввода для автозаполнения форм
+export interface FullBookInput {
+  name: string;
+  isbn: string;
+  description?: string;
+  category?: {
+    uuid: string;
+    name: string;
+  };
+  authors?: {
+    uuid: string;
+    name: string;
+  }[];
+}
+
 
 // категории
 
@@ -61,11 +79,31 @@ export type CategoryRecord = {
   childCount?: number;
 } & BaseRecord
 
+// то, что отправляется на сервер
 export interface CategoryInput {
   name: string;
   description?: string;
   parentId?: string
 }
 
+// для автозаполнения форм
+export interface FullCategoryInput {
+  name: string;
+  description?: string;
+  parent?: {
+    uuid: string;
+    name: string;
+  }
+}
+
 export type CategoryListResponse = Pagination<CategoryRecord>
 
+export type LabelKey = {
+  key: string; //идентификатор
+  label: string; //значение в поле поиска
+}
+
+export type SelectionItem = {
+  label: string; // представление
+  value: string; // идентификатор
+}

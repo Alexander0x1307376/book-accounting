@@ -12,6 +12,8 @@ import AuthorCreate from '../components/pages/authorCreate';
 import AuthorEdit from '../components/pages/authorEdit';
 import BookCreate from '../components/pages/bookCreate';
 import CategoryCreate from '../components/pages/categoryCreate';
+import BookEdit from '../components/pages/bookEdit';
+import CategoryEdit from '../components/pages/categoryEdit';
 
 export const routes: RouteObject[] = [
   {
@@ -54,6 +56,10 @@ export const routes: RouteObject[] = [
         element: <BookCreate />,
       },
       {
+        path: 'book/:id/edit',
+        element: <BookEdit />,
+      },
+      {
         path: 'book/:id',
         element: <BookDetails />,
       },
@@ -65,6 +71,10 @@ export const routes: RouteObject[] = [
       {
         path: 'category/create',
         element: <CategoryCreate />,
+      },
+      {
+        path: 'category/:id/edit',
+        element: <CategoryEdit />,
       },
       {
         path: 'category/:id',

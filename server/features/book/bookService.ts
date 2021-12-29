@@ -36,34 +36,49 @@ ON categories.id = books."categoryId"
 WHERE books.uuid = :id;
 */
 
-export const getItem = async (uuid: string
-  // , { withCategory, withAuthors }: { withCategory: boolean, withAuthors: boolean}
+
+type BookGetItemConfig = {
+  withCategory?: boolean;
+  withAuthors?: boolean;
+};
+
+export const getItem = async (
+  uuid: string, config?: BookGetItemConfig
 ) => {
+  const { withCategory, withAuthors } = config!;
+  
+  const bookQueryBuilder = getRepository(Book).createQueryBuilder('book')
+    .where({ uuid })
+  
+  if (withCategory) {
+    bookQueryBuilder
+    .addSelect(['category.uuid', 'category.name'])
+    .leftJoin('book.category', 'category')
+  }
 
-  // if(!withCategory && !withAuthors) {
-    return await Book.findOneOrFail({ uuid });
-  // }
+  if(withAuthors) {
+    bookQueryBuilder
+    .addSelect(['authors.uuid', 'authors.name'])
+    .leftJoin('book.authors', 'authors')
+  }
 
-  // const bookQueryBuilder = getRepository(Category).createQueryBuilder('books');
-  // const book = bookQueryBuilder
-  //   .where({ uuid })
-  //   .select(['books.id', 'books.name', 'categories.uuid', 'categories.name'])
-  //   .leftJoin('categories.books', 'book')
-  //   .getOne();
-
-  // return book;
+  return await bookQueryBuilder.getOne();
 }
 
-export const create = async ({name, isbn, description, categoryId, authorsId}: BookPostData) => {
+
+
+export const create = async (data: BookPostData) => {
+
+  const { name, isbn, description, categoryId, authorsIds } = data;
 
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId}, {select: ['id']})
     : undefined;
 
-  const authors = authorsId 
+  const authors = authorsIds && authorsIds.length
     ? await Author.find({ 
       select: ['id'],
-      where: { uuid: In(authorsId as string[]) }
+      where: { uuid: In(authorsIds as string[]) }
     })
     : undefined;
 
@@ -80,10 +95,35 @@ export const create = async ({name, isbn, description, categoryId, authorsId}: B
 }
 
 
-export const edit = async (id: string, data: BookPostData) => {
-  const book = await Book.findOneOrFail({ uuid: id });
-  Object.assign(book, data);
-  return await book.save();
+
+export const edit = async (bookUuid: string, data: BookPostData) => {
+
+  const { name, isbn, description, categoryId, authorsIds } = data;
+
+  const category = categoryId
+    ? await Category.findOne({ uuid: categoryId }, { select: ['id'] })
+    : undefined;
+
+  const authors = authorsIds
+    ? await Author.find({
+      select: ['id'],
+      where: { uuid: In(authorsIds as string[]) }
+    })
+    : undefined;
+
+  const book = await Book.findOneOrFail({ uuid: bookUuid });
+
+  Object.assign(book, {
+    name,
+    isbn,
+    description,
+    category,
+    authors
+  });
+
+  await book.save();
+
+  return book;
 }
 
 
@@ -94,7 +134,7 @@ export const remove = async (id: string) => {
 }
 
 
-const bookService: DataService<BookPostData, Book, PaginationData<Book>> = {
+const bookService = {
   create,
   edit,
   getItem,

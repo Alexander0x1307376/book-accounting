@@ -1,4 +1,3 @@
-import { Button, Modal } from "antd";
 import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCategoriesTree } from "../../../store/categoriesSlice";
@@ -8,7 +7,7 @@ import {
 } from "../../../store/services/categoriesApi";
 import TreeList, { TreeView } from "../treeList";
 import { Categories } from '../../../store/categoriesSlice';
-
+import CommonModal from "./commonModal";
 
 export interface CategoryListModalProps {
   visible: boolean;
@@ -32,25 +31,13 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
 
 
   return (
-    <Modal 
+    <CommonModal 
       title="Выбрать категорию"
       visible={visible}
-      closable={false}
-      maskClosable={false}
-      footer={[
-        <Button 
-          key="select" 
-          disabled={!selectedId}
-          type="primary" 
-          onClick={() => {
-            onSelectClick?.({ id: selectedId, name: selectedName})
-          }}
-        >Выбрать</Button>,
-        <Button
-          key="cancel"
-          onClick={onCancelClick}
-        >Отмена</Button>
-      ]}
+      acceptButtonText="Выбрать"
+      onAcceptClick={() => onSelectClick?.({ id: selectedId, name: selectedName}) }
+      onCancelClick={onCancelClick}
+      isAcceptButtonDisabled={!selectedId}
     >
       <TreeList 
         data={categoriesTree}
@@ -68,9 +55,11 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
           }
         }}
       />
-    </Modal>
+    </CommonModal>
   );
 }
+
+
 
 const generateTreeDataView = (data: Categories, parentValue?: string): TreeView[] => {
   const result: TreeView[] = [];

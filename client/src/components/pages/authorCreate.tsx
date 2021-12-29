@@ -8,11 +8,11 @@ const { Title } = Typography;
 
 const AuthorCreate: React.FC = () => {
 
-  const [createAuthor, { isLoading, data, error }] = useCreateAuthorMutation();
+  const [createAuthor, { error }] = useCreateAuthorMutation();
   const navigate = useNavigate();
   const [displayError, setDisplayError] = useState<boolean>(false);
 
-  const handleSubmit = async (values: Partial<AuthorInput>) => {
+  const handleSubmit = async (values: AuthorInput) => {
     try {
       await createAuthor(values).unwrap();
       navigate('/authors/1');
@@ -24,7 +24,10 @@ const AuthorCreate: React.FC = () => {
   return (
     <div>
       <Title>Добавить автора</Title>
-      <EditAuthorForm formLayout={'vertical'} onSubmit={handleSubmit} />
+      <EditAuthorForm 
+        formLayout={'vertical'} 
+        onSubmit={handleSubmit} 
+      />
       {
         error && displayError
         ? <Alert

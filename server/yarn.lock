@@ -1198,6 +1198,13 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+express-query-parser@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/express-query-parser/-/express-query-parser-1.3.2.tgz#204a3c6f6e83ec3255e281591cf55201a8ae72b6"
+  integrity sha512-2eJRM+zSPGG6IIogMKrm/G4jSa0Doe1drYxnL0coPYsW36xb1IFnzMfsHBJeKu6hBIUqKvCkjEpYIl2fxJXwBg==
+  dependencies:
+    express "^4.17.1"
+
 express-validator@^6.13.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/express-validator/-/express-validator-6.13.0.tgz#270d9e8718386b04b1880b5bb7b2c1c2a91a412b"

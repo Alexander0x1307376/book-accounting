@@ -7,7 +7,11 @@ const { Item } = Descriptions;
 
 const BookDetails: FC = () => {
   const { id } = useParams<any>();
-  const { data, isLoading } = useBookDetailsQuery(id);
+  const { data, isLoading } = useBookDetailsQuery({
+    uuid: id!,
+    withAuthors: false,
+    withCategory: false,
+  });
 
   const extra = <ButtonRouterLink to={`/book/${id}/edit`} type='primary'>
     Изменить

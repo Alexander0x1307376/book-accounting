@@ -1,4 +1,4 @@
-import { Query, Send, ParamsDictionary } from 'express-serve-static-core';
+import { Query, Send } from 'express-serve-static-core';
 import { Request } from 'express';
 
 
@@ -7,7 +7,7 @@ export interface TypedRequestBody<T> extends Request {
 }
 
 export interface TypedRequestQuery<T extends Query> extends Request {
-query: T
+  query: T
 }
 
 export interface TypedRequest<

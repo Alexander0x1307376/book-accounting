@@ -1,23 +1,23 @@
 import React from "react";
-import { Form, Input, Button, DatePicker } from "antd";
+import { Form, Input, Button, DatePicker, FormInstance } from "antd";
 import { AuthorInput } from "../../../types";
 import moment from 'moment';
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 
 interface EditAuthorFormProps {
-  recordData?: Partial<AuthorInput>;
-  onSubmit: (values: Partial<AuthorInput>) => void;
+  recordData?: AuthorInput;
+  onSubmit: (values: AuthorInput) => void;
   formLayout?: LayoutType;
-  hiddenSubmitButton?: boolean
+  withoutSubmitButton?: boolean;
+  form?: FormInstance<AuthorInput>;
 }
 
 const dateFormat = "YYYY-MM-DD";
 
+
 const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
-  recordData,
-  onSubmit,
-  formLayout,
+  recordData, onSubmit, formLayout, form, withoutSubmitButton
 }: EditAuthorFormProps) => {
 
   const layout = (formLayout === "horizontal") ? {
@@ -30,10 +30,12 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
 
 
   const onFinish = (values: any): void => {
-    onSubmit({...values,
-      birthDate: values.birthDate ? values.birthDate.format(dateFormat) : '',
-      deathDate: values.deathDate ? values.deathDate.format(dateFormat) : ''
-    } as Partial<AuthorInput>);
+    const submitData = {
+      ...values,
+      birthDate: values.birthDate ? values.birthDate.format(dateFormat) : undefined,
+      deathDate: values.deathDate ? values.deathDate.format(dateFormat) : undefined
+    };
+    onSubmit(submitData);
   };
 
 
@@ -49,6 +51,7 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
 
   return (
     <Form
+      form={form}
       {...layout}
       layout={formLayout || "horizontal"}
       initialValues={initialValues}
@@ -74,11 +77,13 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
         <Input.TextArea />
       </Form.Item>
 
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Отправить
-        </Button>
-      </Form.Item>
+      {withoutSubmitButton ? null : (
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            Отправить
+          </Button>
+        </Form.Item>
+      )}
     </Form>
   );
 };

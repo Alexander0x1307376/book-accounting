@@ -7,7 +7,7 @@ import { CategoryPostData } from './categoryTypes';
 export default {
 
   show: cf(async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     const result = await categoryService.getItem(id);
     res.json(result);
   }),

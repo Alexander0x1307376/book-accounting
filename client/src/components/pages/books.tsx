@@ -39,7 +39,6 @@ const Books: FC = () => {
       title: 'Ошибка при получении данных книг',
       details: requestError.data.message,
       onRetryClick: () => {
-        console.log(error);
         refetch();
       }
     } : undefined}

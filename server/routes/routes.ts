@@ -3,7 +3,7 @@ import userController from '../features/user/userController';
 import categoryController from '../features/category/categoryController';
 import bookController from '../features/book/bookController';
 import authorController from '../features/author/authorController';
-import authorValidationRules from '../validators/rules/authorRules';
+import authorValidationRules from '../features/author/authorValidator';
 import validatorMiddleware from '../validators/validatorMiddleware'
 
 const router = express.Router();

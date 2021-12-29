@@ -45,7 +45,6 @@ const Categories: FC = () => {
       title: 'Ошибка при получении данных категорий',
       details: requestError.data.message,
       onRetryClick: () => {
-        console.log(error);
         refetch();
       }
     } : undefined}

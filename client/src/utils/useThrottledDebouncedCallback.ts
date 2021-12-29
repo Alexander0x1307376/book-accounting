@@ -1,12 +1,17 @@
 import { debounce, throttle } from "lodash";
-import { useCallback } from "react";
+import { useMemo, useRef } from "react";
+
 
 const useThrottledDebouncedCallback = (callback: (...params: any) => void, delayed: number) => {
-  const throttleSearch = useCallback(throttle(callback, delayed), []);
-  const debounceSearch = useCallback(debounce(callback, delayed), []);
+
+  const callbackRef = useRef(callback);
+
+  const throttled = useMemo(() => throttle(callbackRef.current, delayed), [delayed, callbackRef]);
+  const debounced = useMemo(() => debounce(callbackRef.current, delayed), [delayed, callbackRef]);
+
   return (...params: any) => {
-    throttleSearch(...params);
-    debounceSearch(...params);
+    throttled(...params);
+    debounced(...params);
   }
 }
 

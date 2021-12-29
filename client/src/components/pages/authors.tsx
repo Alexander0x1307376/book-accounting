@@ -59,9 +59,9 @@ const Authors: FC = () => {
     }}
     getListError={requestError ? {
       title: 'Ошибка при получении данных авторов',
-      details: requestError.data.message,
+      details: requestError.error,
+      // details: requestError.data.message,
       onRetryClick: () => {
-        console.log(error);
         refetch();
       }
     } : undefined}

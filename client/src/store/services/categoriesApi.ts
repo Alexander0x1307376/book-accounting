@@ -8,21 +8,25 @@ export const categoriesApi = createApi({
   tagTypes: ['Category'],
   endpoints: build => ({
 
+    // query < response , request >
     categories: build.query<CategoryListResponse, number>({
       query: (page: number) => `categories/${page}`,
       providesTags: ['Category']
     }),
 
+    // query < response , request >
     categoryDetails: build.query<CategoryRecord, string>({
-      query: (lobbyUuid: string) => `category/${lobbyUuid}`,
+      query: (uuid: string) => `category/${uuid}`,
       providesTags: ['Category']
     }),
 
+    // query < response , request >
     categoriesSearch: build.query<CategoryRecord[], string>({
       query: (search: string) => `categories/search?search=${search}`,
       providesTags: ['Category']
     }),
 
+    // query < response , request >
     categoriesRoots: build.query<CategoryRecord[], void>({
       query: () => `categories/root`,
       onQueryStarted: async(id, { dispatch, queryFulfilled }) => {
@@ -36,6 +40,7 @@ export const categoriesApi = createApi({
       providesTags: ['Category']
     }),
 
+    // query < response , request >
     categoryChildren: build.query<CategoryRecord[], string>({
       query: (uuid: string) => `category/${uuid}/children`,
       onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
@@ -45,8 +50,8 @@ export const categoriesApi = createApi({
       providesTags: ['Category']
     }),
 
+    // query < response , request >
     createCategory: build.mutation<CategoryRecord, CategoryInput>({
-    // createCategory: build.mutation<CategoryInput, CategoryRecord>({
       query: categoryInput => ({
         url: `category/create`,
         method: 'POST',

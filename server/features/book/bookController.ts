@@ -2,11 +2,20 @@ import bookService from './bookService';
 import { controllerFunction as cf } from '../controller';
 import { TypedRequestBody, TypedRequestQuery } from '../http/types';
 import { BookPostData } from './bookTypes';
+
+
+
+type ShowQueryParams = {
+  withAuthors?: boolean;
+  withCategory?: boolean;
+}
+
 export default {
 
   show: cf(async (req, res) => {
-    const {id} = req.params;
-    const result = await bookService.getItem(id);
+    const { id } = req.params;
+    const { withAuthors, withCategory } = <ShowQueryParams>req.query;
+    const result = await bookService.getItem(id, { withAuthors, withCategory });
     res.json(result);
   }),
 

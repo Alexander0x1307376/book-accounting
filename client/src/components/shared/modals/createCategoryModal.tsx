@@ -1,10 +1,12 @@
 import React from "react";
-import { Modal, Button, Form } from "antd";
+import { Form } from "antd";
 import EditCategoryForm from "../forms/editCategoryForm";
+import CommonModal from "./commonModal";
+import { CategoryInput } from "../../../types";
 
 export interface CreateCategoryModalProps {
   visible: boolean;
-  onSubmit: (value: any) => void;
+  onSubmit: (value: CategoryInput) => void;
   onCancel: () => void;
 }
 
@@ -20,7 +22,7 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = ({
   const handleCreateCategory = () => { 
     form
       .validateFields()
-      .then((values: any) => {
+      .then((values: CategoryInput) => {
         onSubmit(values);
         form.resetFields();
       })
@@ -30,15 +32,12 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = ({
   }
 
   return (
-    <Modal 
+    <CommonModal 
       title="Добавить категорию" 
       visible={visible}
-      maskClosable={false}
-      closable={false}
-      footer={[
-        <Button key="accept" type="primary" onClick={handleCreateCategory}>Создать категорию</Button>,
-        <Button key="cancel" onClick={onCancel}>Отмена</Button>,
-      ]}
+      acceptButtonText="Создать категорию"
+      onAcceptClick={handleCreateCategory}
+      onCancelClick={onCancel}
     >
       <EditCategoryForm 
         form={form}
@@ -46,7 +45,7 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = ({
         withoutSubmitButton
         formLayout="vertical"
       />
-    </Modal>
+    </CommonModal>
   );
 }
 

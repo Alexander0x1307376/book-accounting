@@ -1,16 +1,18 @@
 import React from "react";
 import { Form, Button, Input, FormInstance } from "antd";
 import moment from 'moment';
-import CategoryForeignField from "../foreignFIeld/categoryForeignField";
+import { CategoryInput as CategoryInputType, FullCategoryInput } from "../../../types";
+import CategoryInput from "../foreignField/categoryInput";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 
 interface EditCategoryFormProps {
   recordData?: any;
-  onSubmit: (values: any) => void;
+  onSubmit: (values: CategoryInputType) => void;
   formLayout?: LayoutType;
   withoutSubmitButton?: boolean;
-  form?: FormInstance<any>
+  form?: FormInstance<FullCategoryInput>;
+  withoutCreateParent?: boolean;
 }
 
 
@@ -19,6 +21,7 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
   onSubmit,
   formLayout,
   withoutSubmitButton,
+  withoutCreateParent,
   form
 }: EditCategoryFormProps) => {
 
@@ -56,9 +59,9 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
       </Form.Item>
       <Form.Item
         label="Родительская категория"
-        name="parentId"  
+        name="parent"  
       >
-        <CategoryForeignField withoutCreateButton />
+        <CategoryInput withoutCreateLogic={withoutCreateParent} />
       </Form.Item>
 
       <Form.Item name="description" label="Описание">

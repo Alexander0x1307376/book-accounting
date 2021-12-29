@@ -1,4 +1,4 @@
-import { getRepository, IsNull, Like } from "typeorm"
+import { getRepository, ILike } from "typeorm"
 import { Category } from "../../entity/Category";
 import { CategoryPostData } from "./categoryTypes";
 import { getPaginatedList, PaginationData } from "../../utils/serviceUtils";
@@ -18,7 +18,8 @@ export const getList = async (page: number, rowsPerPage = 10) => {
   );
 }
 
-export const getItem = async (id: string) => {
+
+export const getItem = async ( id: string ) => {
   const category = await Category.findOneOrFail({ uuid: id });
   return category;
 }
@@ -62,10 +63,11 @@ export const categoryWithBooks = async (id: string) => {
 }
 
 export const search = async (search: string, limit: number = 5) => {
+
   const result = await Category.find({
     select: ['uuid', 'name'],
     where: {
-      name: Like(`%${search}%`)
+      name: ILike(`%${search.toString()}%`)
     },
     take: limit
   });

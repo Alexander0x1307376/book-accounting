@@ -8,21 +8,21 @@ const { Title } = Typography;
 
 const AuthorEdit: React.FC = () => {
 
-  const { id }= useParams();
+  const { id } = useParams();
   const {
     data: authorData, 
     isLoading: isAuthorLoading
-  } = useAuthorDetailsQuery(id);
+  } = useAuthorDetailsQuery(id!);
 
-  const [editAuthor, { isLoading, data, error }] = useEditAuthorMutation();
+  const [editAuthor, { error }] = useEditAuthorMutation();
   const [displayError, setDisplayError] = useState<boolean>(false);
 
   const navigate = useNavigate();
   
 
-  const handleSubmit = async (values: Partial<AuthorInput>) => {
+  const handleSubmit = async (values: AuthorInput) => {
     try {
-      await editAuthor({id, data: values}).unwrap();
+      await editAuthor({id: id!, data: values}).unwrap();
       navigate('/authors/1');
     } catch (e) {
       setDisplayError(true);
@@ -38,10 +38,10 @@ const AuthorEdit: React.FC = () => {
           : (<>
             <EditAuthorForm
               recordData={{
-                name: authorData?.name,
+                name: authorData?.name || '',
                 birthDate: authorData?.birthDate,
                 deathDate: authorData?.deathDate,
-                description: authorData?.description
+                description: authorData?.description || ''
               }}
               formLayout={'vertical'}
               onSubmit={handleSubmit}
