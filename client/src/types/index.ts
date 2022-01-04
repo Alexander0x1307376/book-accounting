@@ -76,6 +76,7 @@ export interface FullBookInput {
 export type CategoryRecord = {
   name: string;
   description?: string;
+  parent?: CategoryRecord;
   childCount?: number;
 } & BaseRecord
 

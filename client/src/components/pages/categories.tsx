@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useCategoriesQuery } from '../../store/services/categoriesApi';
+import { useCategoriesQuery, useDeleteCategoryMutation } from '../../store/services/categoriesApi';
 import CrudList from '../shared/crudList';
 
 const columns = [
@@ -21,8 +21,12 @@ const Categories: FC = () => {
   const { page } = useParams();
   const [currentPage, setCurrentPage] = useState<number>(page ? +page : 1);
   const { data, error, isLoading, refetch } = useCategoriesQuery(currentPage);
-
+  
   const requestError = error as any;
+
+
+  const [ deleteCategory ] = useDeleteCategoryMutation();
+
 
   return (<CrudList
     title="Список категорий"
@@ -54,7 +58,10 @@ const Categories: FC = () => {
       deleteLink: id => `/category/${id}/delete`
     }}
     actionClickHandlers={{
-      deleteClick: (id) => { console.log('DELETED', id) },
+      deleteClick: async (id) => {
+        await deleteCategory(id);
+        console.log('DELETED', id);
+      },
       editClick: (id) => { console.log('EDITED', id) },
       detailsClick: (id) => { console.log('DETAILS', id) },
     }}

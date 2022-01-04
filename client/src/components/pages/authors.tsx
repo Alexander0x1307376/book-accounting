@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuthorsQuery } from '../../store/services/authorsApi';
+import { useAuthorsQuery, useDeleteAuthorMutation } from '../../store/services/authorsApi';
 import CrudList from '../shared/crudList';
 
 
@@ -40,6 +40,11 @@ const Authors: FC = () => {
 
   const requestError = error as any;
 
+
+
+  const [ deleteAuthor ] = useDeleteAuthorMutation();
+
+
   return (<CrudList 
     title="Список авторов"
     createLink="/author/create"
@@ -71,9 +76,10 @@ const Authors: FC = () => {
       deleteLink: id => `/author/${id}/delete`
     }}
     actionClickHandlers={{
-      deleteClick: (id) => {console.log('DELETED', id)},
-      editClick: (id) => { console.log('EDITED', id)},
-      detailsClick: (id) => { console.log('DETAILS', id)},
+      deleteClick: async (id) => {
+        await deleteAuthor(id);
+        console.log('DELETED', id);
+      },
     }}
   />);
 }

@@ -6,7 +6,7 @@ import { Category } from "../../entity/Category";
 import { Book } from "../../entity/Book";
 
 import { v4 } from "uuid";
-import { isNumber, map, random, sample, shuffle } from "lodash";
+import { isNumber, random, sample, shuffle } from "lodash";
 
 
 const flatCategories = (categories: Category[]) => {
@@ -45,7 +45,7 @@ export class CreateAuthors implements Seeder {
 
     const authors = await factory(Author)().makeMany(25, { uuid: v4() });
     
-    const categories = await generateCategories(5, () => random(0,3), 3);
+    const categories = await generateCategories(10, () => random(0,5), 3);
     const flattenCategories = flatCategories(categories);
     
     const books = await factory(Book)().makeMany(200, { uuid: v4() });

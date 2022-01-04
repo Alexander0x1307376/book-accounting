@@ -1,10 +1,9 @@
 import { getRepository, In } from "typeorm";
 import { Book } from "../../entity/Book";
-import { getPaginatedList, PaginationData } from "../../utils/serviceUtils";
+import { getPaginatedList } from "../../utils/serviceUtils";
 import { BookPostData } from "./bookTypes";
 import { Category } from "../../entity/Category";
 import { Author } from "../../entity/Author";
-import { DataService } from "../crudController/crudController";
 
 
 export const getList = async (page: number, rowsPerPage = 10) => {
@@ -48,7 +47,7 @@ export const getItem = async (
   const { withCategory, withAuthors } = config!;
   
   const bookQueryBuilder = getRepository(Book).createQueryBuilder('book')
-    .where({ uuid })
+    .where({ uuid });
   
   if (withCategory) {
     bookQueryBuilder

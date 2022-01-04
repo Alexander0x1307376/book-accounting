@@ -3,12 +3,16 @@ import { controllerFunction as cf } from '../controller';
 import { TypedRequestBody } from '../http/types';
 import { CategoryPostData } from './categoryTypes';
 
+type ShowQueryParams = {
+  withParent?: boolean;
+}
 
 export default {
 
   show: cf(async (req, res) => {
-    const { id } = req.params;
-    const result = await categoryService.getItem(id);
+    const { id } = req.params; 
+    const { withParent } = <ShowQueryParams>req.query;
+    const result = await categoryService.getItem(id, { withParent });
     res.json(result);
   }),
 

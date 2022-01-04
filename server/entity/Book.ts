@@ -19,11 +19,13 @@ export class Book extends Model {
   @Column({ nullable: true })
   imageUrl: string
 
-  @ManyToOne(() => Category, category => category.books)
+  @ManyToOne(() => Category, category => category.books, {
+    onDelete: 'SET NULL'
+  })
   category: Category
 
   @ManyToMany(() => Author, author => author.books, {
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE'
   })
   authors: Author[]
 

@@ -24,6 +24,7 @@ const CategoryCreate: React.FC = () => {
     <EditCategoryForm 
       withoutCreateParent={false}
       onSubmit={handleSubmit}
+      formLayout="vertical"
     />
     {
       error && displayError

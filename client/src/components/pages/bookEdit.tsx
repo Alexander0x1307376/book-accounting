@@ -44,6 +44,7 @@ const BookEdit: React.FC = () => {
       authors: bookDetails.authors
     }
 
+  console.log('book init', initialData);
 
   return (
     <div>
@@ -69,10 +70,7 @@ const BookEdit: React.FC = () => {
               : null
           }
         </>
-      }
-      
-
-      
+      }      
     </div>
   );
 }

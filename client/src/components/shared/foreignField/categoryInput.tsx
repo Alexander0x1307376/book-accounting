@@ -3,9 +3,10 @@ import React, { useState, useMemo } from 'react';
 import { useCreateCategoryMutation } from '../../../store/services/categoriesApi';
 import { CategoryInput as CategoryInputType, SelectionItem } from '../../../types';
 import CreateCategoryModal from '../modals/createCategoryModal';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, CopyOutlined } from '@ant-design/icons';
 import { useCategoriesSearchQuery } from "../../../store/services/categoriesApi";
 import useThrottledDebouncedCallback from "../../../utils/useThrottledDebouncedCallback";
+import CategoryListModal from '../modals/categoryListModal';
 
 
 interface InputProps {
@@ -34,7 +35,11 @@ const CategoryInputWithCreateLogic: React.FC<InputProps> = ({onChange, value}) =
   // создание категории
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [createCategory] = useCreateCategoryMutation();
+  
 
+  const [listModalVisible, setListModalVisible] = useState<boolean>(false);
+  
+  
   const handleSubmit = async (values: any) => {
     try {
 
@@ -65,11 +70,23 @@ const CategoryInputWithCreateLogic: React.FC<InputProps> = ({onChange, value}) =
       value={value} 
       onChange={selectCategory} 
       onNewRecordClick={() => setCreateModalVisible(true)}
+      onSelectFromListClick={() => setListModalVisible(true)}
     />
     <CreateCategoryModal
       visible={createModalVisible}
       onSubmit={handleSubmit}
       onCancel={() => setCreateModalVisible(false)}
+    />
+    <CategoryListModal 
+      visible={listModalVisible}
+      onSelectClick={({id, name}) => {
+        selectCategory({
+          label: name,
+          value: id
+        });
+        setListModalVisible(false);
+      }}
+      onCancelClick={() => setListModalVisible(false)}
     />
   </>);
 }
@@ -94,10 +111,11 @@ interface CategoryForeignFieldProps {
   value?: SelectionItem;
   withoutCreateButton?: boolean;
   onNewRecordClick?: () => void;
+  onSelectFromListClick?: () => void;
 }
 
 const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
-  onChange, value, onNewRecordClick
+  onChange, value, onNewRecordClick, onSelectFromListClick
 }) => {
 
   // throttledSearch - троттленное значение для запроса на сервер
@@ -134,6 +152,13 @@ const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
         onSearch={handleSearch} //значение поиска 
         notFoundContent={null}
       />
+      {
+        onSelectFromListClick
+        ? <Tooltip title="выбор из списка">
+            <Button icon={<CopyOutlined />} onClick={onSelectFromListClick} />
+          </Tooltip> 
+          : null
+      }
       {
         onNewRecordClick
           ? <Tooltip title="новая запись">

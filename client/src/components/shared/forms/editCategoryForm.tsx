@@ -1,6 +1,5 @@
 import React from "react";
 import { Form, Button, Input, FormInstance } from "antd";
-import moment from 'moment';
 import { CategoryInput as CategoryInputType, FullCategoryInput } from "../../../types";
 import CategoryInput from "../foreignField/categoryInput";
 
@@ -33,21 +32,29 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
     wrapperCol: { offset: 3, span: 16 },
   } : undefined;
 
-  
-  const initialValues = recordData ? {
-    name: recordData.name,
-    description: recordData.description,
-    birthDate: moment(recordData.birthDate),
-    deathDate: moment(recordData.deathDate)
-  } : undefined;
 
+  const onFinish = (values: any): void => {
+    onSubmit?.({
+      name: values.name,
+      description: values?.description,
+      parentId: values?.parent?.value || undefined
+    })
+  }
+
+
+  const iniitialValues = recordData ? {
+    ...recordData, parent: {
+      label: recordData.parent?.name,
+      value: recordData.parent?.uuid
+    }
+  } : undefined;
 
   return (
     <Form
       {...layout}
       layout={formLayout || "horizontal"}
-      initialValues={initialValues}
-      onFinish={onSubmit}
+      initialValues={iniitialValues}
+      onFinish={onFinish}
       form={form}
     >
       <Form.Item

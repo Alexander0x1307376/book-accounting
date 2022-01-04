@@ -19,7 +19,7 @@ router.get('/categories/search', categoryController.search);
 router.get('/categories/:page', categoryController.list);
 router.post('/category/create', categoryController.create);
 router.post('/category/:id/edit', categoryController.edit);
-router.post('/category/:id/delete', categoryController.remove);
+router.delete('/category/:id/delete', categoryController.remove);
 router.get('/category/:id/books', categoryController.categoryWithBooks);
 router.get('/category/:id/children', categoryController.categoryChildren);
 router.get('/category/:id', categoryController.show);
@@ -29,7 +29,7 @@ router.get('/category/:id', categoryController.show);
 router.get('/books/:page', bookController.list);
 router.post('/book/create', bookController.create);
 router.post('/book/:id/edit', bookController.edit);
-router.post('/book/:id/delete', bookController.remove);
+router.delete('/book/:id/delete', bookController.remove);
 router.get('/book/:id', bookController.show);
 
 // router.post('/author/:id/edit', (req, res) => {

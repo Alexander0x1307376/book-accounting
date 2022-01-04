@@ -55,6 +55,15 @@ export const authorsApi = createApi({
         body: data
       }),
       invalidatesTags: ['Author']
+    }),
+    
+    // mutation< response, request >
+    deleteAuthor: build.mutation<any, string>({
+      query: (id) => ({
+        url: `author/${id}/delete`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Author']
     })
   })
 });
@@ -64,6 +73,7 @@ export const {
   useAuthorDetailsQuery, 
   useCreateAuthorMutation, 
   useEditAuthorMutation,
-  useAuthorSearchQuery
+  useAuthorSearchQuery,
+  useDeleteAuthorMutation
 } = authorsApi;
 

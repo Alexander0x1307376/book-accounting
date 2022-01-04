@@ -2,6 +2,13 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { CategoryInput, CategoryListResponse, CategoryRecord } from '../../types';
 import { insertCategories } from '../categoriesSlice';
 
+
+
+type CategoryDetailsParams = {
+  uuid: string;
+  withParent: boolean;
+}
+
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
@@ -15,8 +22,12 @@ export const categoriesApi = createApi({
     }),
 
     // query < response , request >
-    categoryDetails: build.query<CategoryRecord, string>({
-      query: (uuid: string) => `category/${uuid}`,
+    categoryDetails: build.query<CategoryRecord, CategoryDetailsParams>({
+      query: ({uuid, withParent}) => ({
+        url: `category/${uuid}`,
+        method: 'GET',
+        params: { withParent }
+      }),
       providesTags: ['Category']
     }),
 
@@ -60,6 +71,25 @@ export const categoriesApi = createApi({
       invalidatesTags: ['Category']
     }),
 
+    // query < response , request >
+    editCategory: build.mutation<CategoryRecord, {id: string, data: CategoryInput}>({
+      query: ({id, data}) => ({
+        url: `category/${id}/edit`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Category']
+    }),
+
+    // query < response , request >
+    deleteCategory: build.mutation<CategoryRecord, string>({
+      query: (id) => ({
+        url: `category/${id}/delete`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['Category']
+    }),
+
   })
 });
 
@@ -69,10 +99,10 @@ export const {
   useCategoriesSearchQuery,
   useCategoriesRootsQuery,
   useCategoryChildrenQuery,
-
   useCreateCategoryMutation,
-
+  useEditCategoryMutation,
   useLazyCategoryChildrenQuery,
+  useDeleteCategoryMutation
 } = categoriesApi;
 
 export const {

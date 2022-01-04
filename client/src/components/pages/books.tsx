@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router';
-import { useBooksQuery } from '../../store/services/booksApi';
+import { useBooksQuery, useDeleteBookMutation } from '../../store/services/booksApi';
 import CrudList from '../shared/crudList';
 
 const columns = [
@@ -17,6 +17,10 @@ const Books: FC = () => {
   const { data, error, isLoading, refetch } = useBooksQuery(currentPage);
 
   const requestError = error as any;
+
+
+  const [ deleteBook ] = useDeleteBookMutation();
+
 
   return (<CrudList
     title="Список книг"
@@ -48,7 +52,10 @@ const Books: FC = () => {
       deleteLink: id => `/book/${id}/delete`
     }}
     actionClickHandlers={{
-      deleteClick: (id) => { console.log('DELETED', id) },
+      deleteClick: async (id) => { 
+        await deleteBook(id);
+        console.log('DELETED', id) 
+      },
       editClick: (id) => { console.log('EDITED', id) },
       detailsClick: (id) => { console.log('DETAILS', id) },
     }}
