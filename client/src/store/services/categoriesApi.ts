@@ -98,6 +98,7 @@ export const {
   useCategoryDetailsQuery,
   useCategoriesSearchQuery,
   useCategoriesRootsQuery,
+  useLazyCategoriesRootsQuery,
   useCategoryChildrenQuery,
   useCreateCategoryMutation,
   useEditCategoryMutation,

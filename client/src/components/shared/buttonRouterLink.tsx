@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 
 export interface ButtonRouterLinkProps {
   to: string;
-  type: "primary" | "ghost" | "dashed" | "link" | "text" | "default";
+  type?: "primary" | "ghost" | "dashed" | "link" | "text" | "default";
   danger?: boolean;
-  onClick?: (event?: any) => void; /* eslint-disable-line no-unused-vars */
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void; /* asdasdd eslint-disable-line no-unused-vars */
   children?: React.ReactNode;
 }
 
 const ButtonRouterLink: React.FC<ButtonRouterLinkProps> = ({
   to,
-  type,
+  type = "default",
   danger,
   onClick,
   children,

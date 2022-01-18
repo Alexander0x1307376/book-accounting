@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button,  Table } from "antd";
+import { Alert, Button,  Table, TableProps } from "antd";
 import RecordActionButtons, { RecordActionButtonsProps } from "./recordActionButtons";
 
 type Headers = {
@@ -9,6 +9,9 @@ type Headers = {
 }[];
 
 export interface AdvancedTableProps {
+
+  tableProps?: TableProps<any>
+
   headers: Headers;
   rowsList: any;
   loading: boolean;
@@ -17,20 +20,14 @@ export interface AdvancedTableProps {
   error?: {
     title: string;
     details: string;
-    onRetryClick: () => void
+    onRetryClick?: () => void
   };
 
-  pagination: {
+  pagination?: {
     currentPage: number,
     pageSize: number,
     total: number,
     onChange: (page: number) => void
-  };
-
-  actionLinks?: {
-    detailsLink?: (id: string) => string,
-    editLink?: (id: string) => string,
-    deleteLink?: (id: string) => string,
   };
   actionClickHandlers?: {
     detailsClick?: (id: string) => void,
@@ -39,13 +36,13 @@ export interface AdvancedTableProps {
   };
 }
 
-const NewAdvancedTable: React.FC<AdvancedTableProps> = ({ 
+const AdvancedTable: React.FC<AdvancedTableProps> = ({ 
+  tableProps,
   rowsList,
   error,
   loading,
   pagination,
   headers, 
-  actionLinks, 
   actionClickHandlers,
   recordIdentifier = "id"
 }) => {
@@ -53,11 +50,9 @@ const NewAdvancedTable: React.FC<AdvancedTableProps> = ({
   const actions = {
     title: "Действия",
     key: "action",
+    width: 1,
     render: (text: any, record: any) => {
       const actionButtonProps: RecordActionButtonsProps = {
-        detailsLink: actionLinks?.detailsLink?.(record[recordIdentifier]) || undefined,
-        editLink: actionLinks?.editLink?.(record[recordIdentifier]) || undefined,
-        deleteLink: actionLinks?.deleteLink?.(record[recordIdentifier]) || undefined,
         onDeleteLinkClick: () => actionClickHandlers?.deleteClick?.(record[recordIdentifier]),
         onDetailsLinkClick: () => actionClickHandlers?.detailsClick?.(record[recordIdentifier]),
         onEditLinkClick: () => actionClickHandlers?.editClick?.(record[recordIdentifier]),
@@ -72,27 +67,29 @@ const NewAdvancedTable: React.FC<AdvancedTableProps> = ({
       (error)
       ? <Alert 
         type="error" 
-        message={error.title} 
+        message={error.title}
         showIcon
         description={error.details}
-        action={
-          <Button danger onClick={error.onRetryClick}>Перезагрузить</Button>
+        action={error.onRetryClick 
+          ? <Button danger onClick={error.onRetryClick}>Перезагрузить</Button> 
+          : undefined
         }
       />
       : <Table 
+        {...tableProps}
         rowKey={recordIdentifier || "id"}
         columns={[...headers, actions]}
         dataSource={rowsList}
         loading={loading}
-        pagination={{
+        pagination={pagination ? {
           current: pagination.currentPage,
           pageSize: pagination.pageSize,
           total: pagination.total,
           onChange: (page: number) => pagination.onChange(page),
-        }}
+        }: undefined}
       />
     }
   </>
 };
 
-export default NewAdvancedTable;
+export default AdvancedTable;

@@ -57,7 +57,7 @@ const CategoryEdit: React.FC = () => {
             categoryDetailsError && displayError
               ? <Alert
                 message="Ошибка"
-                description="Какая-то ошибка, хз"
+                description="Сетевая ошибка при изменении категории"
                 type="error"
                 closable
                 onClose={() => setDisplayError(false)}

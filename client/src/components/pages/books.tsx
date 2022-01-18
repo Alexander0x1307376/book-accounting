@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useBooksQuery, useDeleteBookMutation } from '../../store/services/booksApi';
 import CrudList from '../shared/crudList';
 
@@ -18,6 +18,7 @@ const Books: FC = () => {
 
   const requestError = error as any;
 
+  const navigate = useNavigate();
 
   const [ deleteBook ] = useDeleteBookMutation();
 
@@ -39,25 +40,15 @@ const Books: FC = () => {
         setCurrentPage(changedPage);
       }
     }}
-    getListError={requestError ? {
-      title: 'Ошибка при получении данных книг',
-      details: requestError.data.message,
-      onRetryClick: () => {
-        refetch();
-      }
+    getListError={error ? {
+      title: 'Ошибка!',
+      details: 'Не удалось загрузить данные книг',
+      onRetryClick: () => refetch()
     } : undefined}
-    actionLinks={{
-      detailsLink: id => `/book/${id}`,
-      editLink: id => `/book/${id}/edit`,
-      deleteLink: id => `/book/${id}/delete`
-    }}
     actionClickHandlers={{
-      deleteClick: async (id) => { 
-        await deleteBook(id);
-        console.log('DELETED', id) 
-      },
-      editClick: (id) => { console.log('EDITED', id) },
-      detailsClick: (id) => { console.log('DETAILS', id) },
+      editClick: (id) => navigate(`/book/${id}/edit`),
+      detailsClick: (id) => navigate(`/book/${id}`),
+      deleteClick: (id) => deleteBook(id),
     }}
   />);
 }

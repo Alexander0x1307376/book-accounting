@@ -1,17 +1,21 @@
-import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useCategoriesQuery, useDeleteCategoryMutation } from '../../store/services/categoriesApi';
-import CrudList from '../shared/crudList';
+import React, { FC, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { selectCategoriesTree } from '../../store/categoriesSlice';
+import { 
+  useCategoriesQuery, 
+  useCategoriesRootsQuery, 
+  useDeleteCategoryMutation, 
+  useLazyCategoryChildrenQuery 
+} from '../../store/services/categoriesApi';
+import { generateTreeForTable } from '../../utils/generateCategoryTreeDataView';
+import CrudList, { CrudListProps } from '../shared/crudList';
+
 
 const columns = [
   {
-    key: 'uuid',
-    dataIndex: 'uuid',
-    title: 'ID'
-  },
-  {
-    key: 'name',
-    dataIndex: 'name',
+    key: 'title',
+    dataIndex: 'title',
     title: 'Имя'
   }
 ];
@@ -27,45 +31,47 @@ const Categories: FC = () => {
 
   const [ deleteCategory ] = useDeleteCategoryMutation();
 
+  const navigate = useNavigate();
 
-  return (<CrudList
-    title="Список категорий"
-    createLink="/category/create"
-    createButtonText="Добавить категорию"
 
-    tableHeaders={columns}
-    isLoading={isLoading}
-    data={data?.list || []}
-    pagination={{
-      currentPage: data?.page || 1,
-      pageSize: data?.rowsPerPage || 1,
-      total: data?.total || 1,
-      onChange: (changedPage) => {
-        window.history.replaceState(null, '', `${changedPage}`);
-        setCurrentPage(changedPage);
-      }
-    }}
-    getListError={requestError ? {
-      title: 'Ошибка при получении данных категорий',
-      details: requestError.data.message,
-      onRetryClick: () => {
-        refetch();
-      }
-    } : undefined}
-    actionLinks={{
-      detailsLink: id => `/category/${id}`,
-      editLink: id => `/category/${id}/edit`,
-      deleteLink: id => `/category/${id}/delete`
-    }}
-    actionClickHandlers={{
-      deleteClick: async (id) => {
-        await deleteCategory(id);
-        console.log('DELETED', id);
-      },
-      editClick: (id) => { console.log('EDITED', id) },
-      detailsClick: (id) => { console.log('DETAILS', id) },
-    }}
-  />);
+  const categories = useSelector(selectCategoriesTree);
+  useCategoriesRootsQuery();
+  const [fetchChildren] = useLazyCategoryChildrenQuery();
+  const categoriesTree = useMemo(() => generateTreeForTable(categories), [categories]);
+
+  const crudListParams: CrudListProps = {
+    recordIdentifier: 'key',
+    title: 'Список категорий',
+    createLink: '/category/create',
+    createButtonText: 'Добавить категорию',
+    tableHeaders: columns,
+    isLoading,
+    data: categoriesTree || [],
+    actionClickHandlers: {
+      editClick: (id) => navigate(`/category/${id}/edit`),
+      detailsClick: (id) => navigate(`/category/${id}`),
+      deleteClick: (id) => deleteCategory(id)
+    },
+  }
+
+
+  return (
+    <CrudList
+      {...crudListParams}
+      tableProps={{
+        expandable: {
+          onExpand: (expanded, record) => {
+            fetchChildren(record.key);
+          }
+        }
+      }}
+      getListError={error ? {
+        title: 'Ошибка!',
+        details: 'Не удалось загрузить данные категорий',
+        onRetryClick: () => refetch()
+      } : undefined}
+    />
+  )
 }
 
 export default Categories

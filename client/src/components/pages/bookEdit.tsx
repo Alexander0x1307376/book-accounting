@@ -62,7 +62,7 @@ const BookEdit: React.FC = () => {
             bookDetailsError && displayError
               ? <Alert
                 message="Ошибка"
-                description="Какая-то ошибка, хз"
+                description="Сетевая ошибка при изменении книги"
                 type="error"
                 closable
                 onClose={() => setDisplayError(false)}

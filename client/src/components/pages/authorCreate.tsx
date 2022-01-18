@@ -32,7 +32,7 @@ const AuthorCreate: React.FC = () => {
         error && displayError
         ? <Alert
           message="Ошибка"
-          description={(error as any).data.message}
+          description="Не удалось создать автора"
           type="error"
           closable
           onClose={() => setDisplayError(false)}

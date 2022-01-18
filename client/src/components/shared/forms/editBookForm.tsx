@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 import { BookInput, FullBookInput } from "../../../types";
 import { Form, Input, Button, FormInstance } from "antd";
-import CategoryInput from "../foreignField/categoryInput";
-import AuthorsInput from "../foreignField/authorsInput";
+import CategoryInput from "../relationField/categoryInput";
+import AuthorsInput from "../relationField/authorsInput";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 

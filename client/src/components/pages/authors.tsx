@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthorsQuery, useDeleteAuthorMutation } from '../../store/services/authorsApi';
 import CrudList from '../shared/crudList';
 
@@ -40,6 +40,7 @@ const Authors: FC = () => {
 
   const requestError = error as any;
 
+  const navigate = useNavigate();
 
 
   const [ deleteAuthor ] = useDeleteAuthorMutation();
@@ -62,24 +63,15 @@ const Authors: FC = () => {
         setCurrentPage(changedPage);
       }
     }}
-    getListError={requestError ? {
-      title: 'Ошибка при получении данных авторов',
-      details: requestError.error,
-      // details: requestError.data.message,
-      onRetryClick: () => {
-        refetch();
-      }
+    getListError={error ? {
+      title: 'Ошибка!',
+      details: 'Не удалось загрузить данные авторов',
+      onRetryClick: () => refetch()
     } : undefined}
-    actionLinks={{
-      detailsLink: id => `/author/${id}`,
-      editLink: id => `/author/${id}/edit`,
-      deleteLink: id => `/author/${id}/delete`
-    }}
     actionClickHandlers={{
-      deleteClick: async (id) => {
-        await deleteAuthor(id);
-        console.log('DELETED', id);
-      },
+      editClick: (id) => navigate(`/author/${id}/edit`),
+      detailsClick: (id) => navigate(`/author/${id}`),
+      deleteClick: (id) => deleteAuthor(id)
     }}
   />);
 }

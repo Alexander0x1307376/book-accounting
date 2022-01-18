@@ -3,11 +3,12 @@ import { useSelector } from "react-redux";
 import { selectCategoriesTree } from "../../../store/categoriesSlice";
 import { 
   useCategoriesRootsQuery, 
+  // useLazyCategoriesRootsQuery, 
   useLazyCategoryChildrenQuery
 } from "../../../store/services/categoriesApi";
-import TreeList, { TreeView } from "../treeList";
-import { Categories } from '../../../store/categoriesSlice';
+import TreeList from "../treeList";
 import CommonModal from "./commonModal";
+import { generateCategoryTreeDataView } from "../../../utils/generateCategoryTreeDataView";
 
 export interface CategoryListModalProps {
   visible: boolean;
@@ -20,11 +21,9 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
 }) => {
 
   const categories = useSelector(selectCategoriesTree);
-
   useCategoriesRootsQuery();
   const [fetch] = useLazyCategoryChildrenQuery();
-
-  const categoriesTree = useMemo(() => generateTreeDataView(categories), [categories]);
+  const categoriesTree = useMemo(() => generateCategoryTreeDataView(categories), [categories]);
 
   const [selectedId, setSelectedId] = useState<string>('');
   const [selectedName, setSelectedName] = useState<string>('');
@@ -58,30 +57,5 @@ const CategoryListModal: React.FC<CategoryListModalProps> = ({
     </CommonModal>
   );
 }
-
-
-
-const generateTreeDataView = (data: Categories, parentValue?: string): TreeView[] => {
-  const result: TreeView[] = [];
-
-  for (let key in data) {
-    
-    if (data[key].parent === parentValue) {
-      
-      const children = (data[key].children?.length)
-        ? generateTreeDataView(data, key)
-        : undefined;
-
-      result.push({
-        key,
-        title: data[key].name,
-        isLeaf: !data[key].childCount,
-        children
-      });
-    }
-  }
-
-  return result;
-};
 
 export default CategoryListModal;

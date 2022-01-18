@@ -50,7 +50,7 @@ const AuthorEdit: React.FC = () => {
               error && displayError
               ? <Alert
                 message="Ошибка"
-                description={(error as any).data.message}
+                description="Сетевая ошибка при изменении автора"
                 type="error"
                 closable
                 onClose={() => setDisplayError(false)}

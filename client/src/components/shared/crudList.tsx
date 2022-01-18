@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Row, Space, Typography } from 'antd';
+import { Divider, Row, Space, Typography, TableProps } from 'antd';
 import ButtonRouterLink from './buttonRouterLink';
 import AdvancedTable from './advancedTable';
 const { Title } = Typography;
@@ -11,11 +11,16 @@ type Headers = {
 }[];
 
 export interface CrudListProps {
+
+  tableProps?: TableProps<any>,
+
+  recordIdentifier?: string,
+
   title: string,
   tableHeaders: Headers,
 
   data: any[],
-  pagination: {
+  pagination?: {
     currentPage: number,
     pageSize: number,
     total: number,
@@ -30,42 +35,39 @@ export interface CrudListProps {
   getListError?: {
     title: string;
     details: string;
-    onRetryClick: () => void
+    onRetryClick?: () => void
   },
-
-  actionLinks?: {
-    detailsLink?: (id: string) => string,
-    editLink?: (id: string) => string,
-    deleteLink?: (id: string) => string,
-  },
+  
   actionClickHandlers?: {
     detailsClick?: (id: string) => void,
     editClick?: (id: string) => void,
     deleteClick?: (id: string) => void,
-  }
+  },
+
+  headerSlot?: React.ReactNode
 
 }
 
 
 const CrudList: React.FC<CrudListProps> = ({
+  tableProps,
+  recordIdentifier,
   title,
   tableHeaders,
   isLoading,
-
   data,
   pagination,
-
   getListError,
   createLink,
   createButtonText,
-
-  actionLinks,
-  actionClickHandlers
+  actionClickHandlers,
+  headerSlot
 }) => {
   return (<>
     <Title>{title}</Title>
-    <Row justify="start">
+    <Row justify="end">
       <Space>
+        {headerSlot}
         <ButtonRouterLink to={createLink} type="primary">
           {createButtonText}
         </ButtonRouterLink>
@@ -73,13 +75,13 @@ const CrudList: React.FC<CrudListProps> = ({
       <Divider />
     </Row>
     <AdvancedTable
-      recordIdentifier='uuid'
+      tableProps={tableProps}
+      recordIdentifier={recordIdentifier || 'uuid'}
       headers={tableHeaders}
       rowsList={data}
       loading={isLoading}
       error={getListError}
       pagination={pagination}
-      actionLinks={actionLinks}
       actionClickHandlers={actionClickHandlers}
     />
   </>);

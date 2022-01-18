@@ -11,7 +11,28 @@ export type BaseRecord = {
   updatedAt?: string;
 }
 
-// автор
+
+// #region пользователи
+
+export type UserRecord = {
+  name: string;
+  email: string;
+} & BaseRecord;
+
+export type UserListResponse = Pagination<UserRecord>
+
+
+export interface UserInput {
+  name: string;
+  email: string;
+  password?: string;
+}
+
+// #endregion
+
+
+
+// #region автор
 
 // ответ сервера - запись автора
 export type AuthorRecord = {
@@ -32,8 +53,10 @@ export interface AuthorInput {
   description?: string;
 }
 
+// #endregion
 
-// книги
+
+// #region книги
 
 export type BookRecord = {
   name: string;
@@ -69,8 +92,10 @@ export interface FullBookInput {
   }[];
 }
 
+// #endregion
 
-// категории
+
+// #region категории
 
 // запись категории
 export type CategoryRecord = {
@@ -99,6 +124,11 @@ export interface FullCategoryInput {
 
 export type CategoryListResponse = Pagination<CategoryRecord>
 
+// #endregion
+
+
+// #region общие типы
+
 export type LabelKey = {
   key: string; //идентификатор
   label: string; //значение в поле поиска
@@ -108,3 +138,12 @@ export type SelectionItem = {
   label: string; // представление
   value: string; // идентификатор
 }
+
+export type TreeView = {
+  title: string,
+  key: string,
+  isLeaf?: boolean,
+  children?: TreeView[]
+}
+
+// #endregion

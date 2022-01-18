@@ -30,7 +30,7 @@ const CategoryCreate: React.FC = () => {
       error && displayError
       ? <Alert
         message="Ошибка"
-        description={(error as any).data.message}
+        description="Не удалось создать категорию"
         type="error"
         closable
         onClose={() => setDisplayError(false)}

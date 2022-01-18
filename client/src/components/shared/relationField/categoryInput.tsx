@@ -144,6 +144,7 @@ const CategoryForeignField: React.FC<CategoryForeignFieldProps> = ({
       <Select
         style={{ flex: '1' }}
         showSearch
+        allowClear
         labelInValue
         filterOption={false}
         value={value} //выбранная запись

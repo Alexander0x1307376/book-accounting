@@ -1,21 +1,8 @@
 import React from "react";
 import styled from 'styled-components';
 import { Tree } from "antd";
+import { TreeView } from "../../types";
 
-export type CategoryDenormalized = {
-  id: string,
-  name: string,
-  childCount?: number,
-  parent?: string,
-  children?: CategoryDenormalized[] 
-}
-
-export type TreeView = {
-  title: string,
-  key: string,
-  isLeaf?: boolean,
-  children?: TreeView[]
-}
 
 const TreeContainer = styled.div`
   height: 300px;
