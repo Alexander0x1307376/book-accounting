@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Input, FormInstance } from "antd";
 import { CategoryInput as CategoryInputType, FullCategoryInput } from "../../../types";
 import CategoryInput from "../relationField/categoryInput";
@@ -24,6 +24,9 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
   form
 }: EditCategoryFormProps) => {
 
+
+
+
   const layout = (formLayout === "horizontal") ? {
     labelCol: { span: 3 },
     wrapperCol: { span: 16 },
@@ -42,18 +45,25 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
   }
 
 
-  const iniitialValues = recordData ? {
-    ...recordData, parent: {
-      label: recordData.parent?.name,
-      value: recordData.parent?.uuid
-    }
-  } : undefined;
+  useEffect(() => {
+
+    const iniitialValues = recordData ? {
+      ...recordData, parent: {
+        label: recordData.parent?.name,
+        value: recordData.parent?.uuid
+      }
+    } : undefined;
+
+    form?.setFieldsValue(iniitialValues);
+
+  }, [recordData]);
+
+  
 
   return (
     <Form
       {...layout}
       layout={formLayout || "horizontal"}
-      initialValues={iniitialValues}
       onFinish={onFinish}
       form={form}
     >
@@ -72,7 +82,10 @@ const EditCategoryForm: React.FC<EditCategoryFormProps> = ({
       </Form.Item>
 
       <Form.Item name="description" label="Описание">
-        <Input.TextArea />
+        <Input.TextArea autoSize={{
+          minRows: 5,
+          maxRows: 20
+        }} />
       </Form.Item>
 
       {

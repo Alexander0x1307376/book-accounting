@@ -1,10 +1,32 @@
 import { FC } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Avatar, Layout, Menu, Space } from 'antd';
+import { Layout, Menu } from 'antd';
 import AccountWidget from "../shared/accountWidget";
-import SubMenu from "antd/lib/menu/SubMenu";
-import { UserOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
-const { Content, Sider, Footer } = Layout;
+const { Content, Sider } = Layout;
+
+
+const Items = [
+  {
+    title: 'Главная',
+    link: '/'
+  },
+  {
+    title: 'Авторы',
+    link: '/authors'
+  },
+  {
+    title: 'Книги',
+    link: '/books'
+  },
+  {
+    title: 'Категории',
+    link: '/categories'
+  },
+  {
+    title: 'Пользователи',
+    link: '/users'
+  },
+];
 
 const Main: FC = () => {
   return (
@@ -17,27 +39,19 @@ const Main: FC = () => {
           defaultOpenKeys={['sub1']}
           style={{ height: '100%', borderRight: 0 }}
         >
-          <Menu.Item key="1"><Link to="/">Главная</Link></Menu.Item>
-          <Menu.Item key="2"><Link to="/authors/1">Авторы</Link></Menu.Item>
-          <Menu.Item key="3"><Link to="/books/1">Книги</Link></Menu.Item>
-          <Menu.Item key="4"><Link to="/categories/1">Категории</Link></Menu.Item>
-          <Menu.Item key="5"><Link to="/users/1">Пользователи</Link></Menu.Item>
+          {
+            Items.map(({title, link}, index) => 
+              <Menu.Item key={index+1}><Link to={link}>{title}</Link></Menu.Item>
+            )
+          }
         </Menu>
       </Sider>
-      <Layout style={{ padding: '0 24px 24px' }}>
+      <Layout style={{ padding: '12px' }}>
         <Content
           className="site-layout-background"
-          style={{
-            padding: 24,
-            margin: 0,
-            minHeight: 280,
-          }}
         >
           <Outlet />
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Libro-1309
-        </Footer>
       </Layout>
     </Layout>
   )

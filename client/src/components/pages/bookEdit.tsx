@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBookDetailsQuery, useEditBookMutation } from "../../store/services/booksApi";
 import { BookInput, FullBookInput } from "../../types";
-import { Typography, Alert } from "antd";
 import EditBookForm from "../shared/forms/editBookForm";
-import { LoadingOutlined } from "@ant-design/icons";
-
-const { Title } = Typography;
-
+import { useForm } from "antd/lib/form/Form";
+import EditEntityLayout from "../shared/editEntityLayout";
+import ButtonRouterLink from "../shared/buttonRouterLink";
 
 const BookEdit: React.FC = () => {
 
@@ -16,8 +14,10 @@ const BookEdit: React.FC = () => {
 
   const [displayError, setDisplayError] = useState<boolean>(false);
 
+  const [form] = useForm();
+
   const {
-    data: bookDetails, isLoading: isBookLoading, error: bookDetailsError
+    data: bookDetails, isLoading, error
   } = useBookDetailsQuery({
     uuid: id!, withAuthors: true, withCategory: true
   });
@@ -35,7 +35,7 @@ const BookEdit: React.FC = () => {
 
 
   // зачем?!
-  const initialData: FullBookInput | undefined = (isBookLoading || !bookDetails) 
+  const initialData: FullBookInput | undefined = (isLoading || !bookDetails) 
     ? undefined : {
       isbn: bookDetails.isbn,
       name: bookDetails.name,
@@ -44,34 +44,25 @@ const BookEdit: React.FC = () => {
       authors: bookDetails.authors
     }
 
-  console.log('book init', initialData);
 
   return (
-    <div>
-      {
-        isBookLoading
-          ? <LoadingOutlined />
-          : <>
-          <Title>Редактировать книгу</Title>
-          <EditBookForm 
-            formLayout="vertical" 
-            recordData={initialData} 
-            onSubmit={handleSubmit} 
-          />
-          {
-            bookDetailsError && displayError
-              ? <Alert
-                message="Ошибка"
-                description="Сетевая ошибка при изменении книги"
-                type="error"
-                closable
-                onClose={() => setDisplayError(false)}
-              />
-              : null
-          }
-        </>
-      }      
-    </div>
+    <EditEntityLayout
+      title={`Редактировать книгу ${bookDetails?.name || ''}`}
+      error={error}
+      isLoading={isLoading}
+      extra={
+        <ButtonRouterLink to={`/books/${id}`} type='default'>
+          К просмотру
+        </ButtonRouterLink>
+      }
+    >
+      <EditBookForm
+        form={form}
+        formLayout="vertical"
+        recordData={initialData}
+        onSubmit={handleSubmit}
+      />
+    </EditEntityLayout>
   );
 }
 

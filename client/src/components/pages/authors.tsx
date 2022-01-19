@@ -1,44 +1,42 @@
 import React, { FC, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthorsQuery, useDeleteAuthorMutation } from '../../store/services/authorsApi';
-import CrudList from '../shared/crudList';
+import CrudLayout from '../shared/crudLayout';
 
 
-const columns = [
-  {
-    key: 'name',
-    dataIndex: 'name',
-    title: 'Имя'
-  },
-  {
-    key: 'birthDate',
-    dataIndex: 'birthDate',
-    title: 'Дата рождения'
-  },
-  {
-    key: 'deathDate',
-    dataIndex: 'deathDate',
-    title: 'Дата смерти'
-  },
-  {
-    key: 'createdAt',
-    dataIndex: 'createdAt',
-    title: 'Дата создания'
-  },
-  {
-    key: 'updatedAt',
-    dataIndex: 'updatedAt',
-    title: 'Дата обновления'
-  },
-];
+// const columns = [
+//   {
+//     key: 'name',
+//     dataIndex: 'name',
+//     title: 'Имя'
+//   },
+//   {
+//     key: 'birthDate',
+//     dataIndex: 'birthDate',
+//     title: 'Дата рождения'
+//   },
+//   {
+//     key: 'deathDate',
+//     dataIndex: 'deathDate',
+//     title: 'Дата смерти'
+//   },
+//   {
+//     key: 'createdAt',
+//     dataIndex: 'createdAt',
+//     title: 'Дата создания'
+//   },
+//   {
+//     key: 'updatedAt',
+//     dataIndex: 'updatedAt',
+//     title: 'Дата обновления'
+//   },
+// ];
 
 const Authors: FC = () => {
 
-  const { page } = useParams();
-  const [currentPage, setCurrentPage] = useState<number>(page ? +page : 1);
+  const { id } = useParams();
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading, refetch } = useAuthorsQuery(currentPage);
-
-  const requestError = error as any;
 
   const navigate = useNavigate();
 
@@ -46,12 +44,19 @@ const Authors: FC = () => {
   const [ deleteAuthor ] = useDeleteAuthorMutation();
 
 
-  return (<CrudList 
-    title="Список авторов"
-    createLink="/author/create"
+  return (<CrudLayout 
+    title="Авторы"
+    createLink="/authors/create"
     createButtonText="Добавить автора"
-
-    tableHeaders={columns}
+    // tableHeaders={columns}
+    tableProps={{
+      rowSelection: {
+        type: 'radio',
+        selectedRowKeys: [id] as React.Key[],
+        renderCell: () => undefined,
+        columnWidth: 0
+      }
+    }}
     isLoading={isLoading}
     data={data?.list || []}
     pagination={{
@@ -59,7 +64,7 @@ const Authors: FC = () => {
       pageSize: data?.rowsPerPage || 1,
       total: data?.total || 1,
       onChange: (changedPage) => {
-        window.history.replaceState(null, '', `${changedPage}`);
+        // window.history.replaceState(null, '', `${changedPage}`);
         setCurrentPage(changedPage);
       }
     }}
@@ -69,8 +74,8 @@ const Authors: FC = () => {
       onRetryClick: () => refetch()
     } : undefined}
     actionClickHandlers={{
-      editClick: (id) => navigate(`/author/${id}/edit`),
-      detailsClick: (id) => navigate(`/author/${id}`),
+      editClick: (id) => navigate(`/authors/${id}/edit`),
+      detailsClick: (id) => navigate(`/authors/${id}`),
       deleteClick: (id) => deleteAuthor(id)
     }}
   />);

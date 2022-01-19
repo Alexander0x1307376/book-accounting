@@ -1,7 +1,8 @@
-import React from "react";
-import { Form, Input, Button, DatePicker, FormInstance } from "antd";
+import React, { useEffect, useMemo } from "react";
+import { Form, Input, Button, DatePicker, FormInstance, Row, Col, Space } from "antd";
 import { AuthorInput } from "../../../types";
 import moment from 'moment';
+import { useForm } from "antd/lib/form/Form";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 
@@ -17,9 +18,10 @@ const dateFormat = "YYYY-MM-DD";
 
 
 const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
-  recordData, onSubmit, formLayout, form, withoutSubmitButton
+  recordData, onSubmit, formLayout, withoutSubmitButton, form
 }: EditAuthorFormProps) => {
 
+  // #region лейаут
   const layout = (formLayout === "horizontal") ? {
     labelCol: { span: 3 },
     wrapperCol: { span: 16 },
@@ -27,6 +29,7 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
   const tailLayout = (formLayout === "horizontal") ? {
     wrapperCol: { offset: 3, span: 16 },
   } : undefined;
+  // #endregion
 
 
   const onFinish = (values: any): void => {
@@ -38,15 +41,20 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
     onSubmit(submitData);
   };
 
+  useEffect(() => {
+    
+    const initialValues = recordData ? {
+      name: recordData.name,
+      description: recordData.description,
+      birthDate: recordData.birthDate ? moment(recordData.birthDate) : undefined,
+      deathDate: recordData.deathDate ? moment(recordData.deathDate) : undefined
+    } : undefined;
+
+    form?.setFieldsValue(initialValues as Partial<AuthorInput>);
+
+  }, [recordData, form]);
 
 
-
-  const initialValues = recordData ? {
-    name: recordData.name,
-    description: recordData.description,
-    birthDate: moment(recordData.birthDate),
-    deathDate: moment(recordData.deathDate)
-  } : undefined;
 
 
   return (
@@ -54,7 +62,6 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
       form={form}
       {...layout}
       layout={formLayout || "horizontal"}
-      initialValues={initialValues}
       onFinish={onFinish}
     >
       <Form.Item
@@ -65,16 +72,24 @@ const EditAuthorForm: React.FC<EditAuthorFormProps> = ({
         <Input />
       </Form.Item>
 
-      <Form.Item name="birthDate" label="Дата рождения">
-        <DatePicker format={dateFormat} />
-      </Form.Item>
-
-      <Form.Item name="deathDate" label="Дата смерти">
-        <DatePicker format={dateFormat} />
-      </Form.Item>
+      <Row>
+        <Col span={12}>
+          <Form.Item name="birthDate" label="Дата рождения" style={{ paddingRight: '6px' }}>
+            <DatePicker style={{ width: '100%' }} format={dateFormat} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="deathDate" label="Дата смерти" style={{ paddingLeft: '6px' }}>
+            <DatePicker style={{ width: '100%' }} format={dateFormat} />
+          </Form.Item>
+        </Col>
+      </Row>
 
       <Form.Item name="description" label="Описание">
-        <Input.TextArea />
+        <Input.TextArea autoSize={{
+          minRows: 5,
+          maxRows: 20
+        }} />
       </Form.Item>
 
       {withoutSubmitButton ? null : (

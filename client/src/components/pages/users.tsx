@@ -1,36 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDeleteUserMutation, useUsersQuery } from "../../store/services/usersApi";
-import CrudList from "../shared/crudList";
+import CrudLayout from "../shared/crudLayout";
 
 
-const columns = [
-  {
-    key: 'uuid',
-    dataIndex: 'uuid',
-    title: 'ID'
-  },
-  {
-    key: 'name',
-    dataIndex: 'name',
-    title: 'Имя'
-  },
-  {
-    key: 'email',
-    dataIndex: 'email',
-    title: 'Почта'
-  },
-  {
-    key: 'createdAt',
-    dataIndex: 'createdAt',
-    title: 'Дата создания'
-  },
-  {
-    key: 'updatedAt',
-    dataIndex: 'updatedAt',
-    title: 'Дата обновления'
-  },
-];
+// const columns = [
+//   {
+//     key: 'uuid',
+//     dataIndex: 'uuid',
+//     title: 'ID'
+//   },
+//   {
+//     key: 'name',
+//     dataIndex: 'name',
+//     title: 'Имя'
+//   },
+//   {
+//     key: 'email',
+//     dataIndex: 'email',
+//     title: 'Почта'
+//   },
+//   {
+//     key: 'createdAt',
+//     dataIndex: 'createdAt',
+//     title: 'Дата создания'
+//   },
+//   {
+//     key: 'updatedAt',
+//     dataIndex: 'updatedAt',
+//     title: 'Дата обновления'
+//   },
+// ];
 
 const Users: React.FC = () => {
   
@@ -40,12 +40,11 @@ const Users: React.FC = () => {
   const navigate = useNavigate();
   const [deleteUser] = useDeleteUserMutation();
 
-  return (<CrudList
+  return (<CrudLayout
     title="Список пользователей"
     createLink="/user/create"
     createButtonText="Добавить пользователя"
-
-    tableHeaders={columns}
+    // tableHeaders={columns}
     isLoading={isLoading}
     data={data?.list || []}
     pagination={{
@@ -63,8 +62,8 @@ const Users: React.FC = () => {
       onRetryClick: () => refetch()
     } : undefined}
     actionClickHandlers={{
-      editClick: (id) => navigate(`/user/${id}/edit`),
-      detailsClick: (id) => navigate(`/user/${id}`),
+      editClick: (id) => navigate(`/users/${id}/edit`),
+      detailsClick: (id) => navigate(`/users/${id}`),
       deleteClick: async (id) => {
         await deleteUser(id);
       },

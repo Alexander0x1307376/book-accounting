@@ -9,7 +9,7 @@ import {
   useLazyCategoryChildrenQuery 
 } from '../../store/services/categoriesApi';
 import { generateTreeForTable } from '../../utils/generateCategoryTreeDataView';
-import CrudList, { CrudListProps } from '../shared/crudList';
+import CrudLayout, { CrudLayoutProps } from '../shared/crudLayout';
 
 
 const columns = [
@@ -22,8 +22,8 @@ const columns = [
 
 const Categories: FC = () => {
 
-  const { page } = useParams();
-  const [currentPage, setCurrentPage] = useState<number>(page ? +page : 1);
+  const { id } = useParams();
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading, refetch } = useCategoriesQuery(currentPage);
   
   const requestError = error as any;
@@ -39,30 +39,35 @@ const Categories: FC = () => {
   const [fetchChildren] = useLazyCategoryChildrenQuery();
   const categoriesTree = useMemo(() => generateTreeForTable(categories), [categories]);
 
-  const crudListParams: CrudListProps = {
+  const crudListParams: CrudLayoutProps = {
     recordIdentifier: 'key',
-    title: 'Список категорий',
-    createLink: '/category/create',
+    title: 'Категории',
+    createLink: '/categories/create',
     createButtonText: 'Добавить категорию',
     tableHeaders: columns,
     isLoading,
     data: categoriesTree || [],
     actionClickHandlers: {
-      editClick: (id) => navigate(`/category/${id}/edit`),
-      detailsClick: (id) => navigate(`/category/${id}`),
+      editClick: (id) => navigate(`/categories/${id}/edit`),
+      detailsClick: (id) => navigate(`/categories/${id}`),
       deleteClick: (id) => deleteCategory(id)
     },
   }
 
-
   return (
-    <CrudList
+    <CrudLayout
       {...crudListParams}
       tableProps={{
         expandable: {
           onExpand: (expanded, record) => {
             fetchChildren(record.key);
           }
+        },
+        rowSelection: {
+          type: 'radio',
+          selectedRowKeys: [id] as React.Key[],
+          renderCell: () => undefined,
+          columnWidth: 0
         }
       }}
       getListError={error ? {

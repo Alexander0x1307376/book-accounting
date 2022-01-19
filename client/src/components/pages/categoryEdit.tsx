@@ -5,6 +5,9 @@ import { Typography, Alert } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useCategoryDetailsQuery, useEditCategoryMutation } from "../../store/services/categoriesApi";
 import { CategoryInput, FullCategoryInput } from "../../types";
+import { useForm } from "antd/lib/form/Form";
+import EditEntityLayout from "../shared/editEntityLayout";
+import ButtonRouterLink from "../shared/buttonRouterLink";
 
 const { Title } = Typography;
 
@@ -18,16 +21,15 @@ const CategoryEdit: React.FC = () => {
   const [displayError, setDisplayError] = useState<boolean>(false);
 
   const {
-    data: categoryDetails, isLoading: isCategoryLoading, error: categoryDetailsError
+    data: categoryDetails, isLoading, error
   } = useCategoryDetailsQuery({uuid: id!, withParent: true});
 
-  console.log('categoryDetails', categoryDetails);
-
+  const [form] = useForm();
 
   const [editCategory] = useEditCategoryMutation();
 
 
-  const initialData: FullCategoryInput | undefined = (!isCategoryLoading && categoryDetails) ? {
+  const initialData: FullCategoryInput | undefined = (!isLoading && categoryDetails) ? {
     name: categoryDetails.name,
     description: categoryDetails.description,
     parent: categoryDetails.parent
@@ -42,31 +44,25 @@ const CategoryEdit: React.FC = () => {
     }
   };
 
-  return (<div>
-    {
-      isCategoryLoading
-        ? <LoadingOutlined />
-        : <>
-          <Title>Редактировать категорию</Title>
-          <EditCategoryForm
-            formLayout="vertical"
-            recordData={initialData}
-            onSubmit={handleSubmit}
-          />
-          {
-            categoryDetailsError && displayError
-              ? <Alert
-                message="Ошибка"
-                description="Сетевая ошибка при изменении категории"
-                type="error"
-                closable
-                onClose={() => setDisplayError(false)}
-              />
-              : null
-          }
-        </>
-    }
-  </div>)
+  return (
+    <EditEntityLayout
+      title={`Редактировать категорию ${categoryDetails?.name}`}
+      error={error}
+      isLoading={isLoading}
+      extra={
+        <ButtonRouterLink to={`/categories/${id}`} type='default'>
+          К просмотру
+        </ButtonRouterLink>
+      }
+    >
+      <EditCategoryForm
+        form={form}
+        formLayout="vertical"
+        recordData={initialData}
+        onSubmit={handleSubmit}
+      />
+    </EditEntityLayout>
+  )
 }
 
 export default CategoryEdit;

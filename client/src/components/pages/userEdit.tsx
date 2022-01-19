@@ -5,6 +5,8 @@ import { Typography, Alert } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useUserDetailsQuery, useEditUserMutation } from "../../store/services/usersApi";
 import { UserInput } from "../../types";
+import EditEntityLayout from "../shared/editEntityLayout";
+import ButtonRouterLink from "../shared/buttonRouterLink";
 
 const { Title } = Typography;
 
@@ -18,7 +20,7 @@ const UserEdit: React.FC = () => {
   const [displayError, setDisplayError] = useState<boolean>(false);
 
   const {
-    data: userDetails, isLoading: isUserLoading, error: userDetailsError
+    data: userDetails, isLoading, error
   } = useUserDetailsQuery(id!);
 
 
@@ -26,46 +28,40 @@ const UserEdit: React.FC = () => {
   const [editUser] = useEditUserMutation();
 
 
-  const initialData: UserInput | undefined = (!isUserLoading && userDetails) ? {
+  const initialData: UserInput | undefined = (!isLoading && userDetails) ? {
     name: userDetails.name,
     email: userDetails.email,
     password: ''
-  } : undefined
+  } : undefined;
 
   const handleSubmit = async (value: UserInput) => {
     try {
       await editUser({ id: id!, data: value }).unwrap();
-      navigate('/users/1');
+      navigate('/users');
     } catch (e) {
       setDisplayError(true);
     }
   };
 
-  return (<div>
-    {
-      isUserLoading
-        ? <LoadingOutlined />
-        : <>
-          <Title>Редактировать пользователя</Title>
-          <EditUserForm
-            formLayout="vertical"
-            recordData={initialData}
-            onSubmit={handleSubmit}
-          />
-          {
-            userDetailsError && displayError
-              ? <Alert
-                message="Ошибка"
-                description="Сетевая ошибка при изменении пользователя"
-                type="error"
-                closable
-                onClose={() => setDisplayError(false)}
-              />
-              : null
-          }
-        </>
-    }
-  </div>)
+
+  return (
+    <EditEntityLayout
+      title={`Редактировать пользователя`}
+      error={error}
+      isLoading={isLoading}
+      extra={
+        <ButtonRouterLink to={`/users/${id}`} type='default'>
+          К просмотру
+        </ButtonRouterLink>
+      }
+    >
+      <EditUserForm
+        formLayout="vertical"
+        recordData={initialData}
+        onSubmit={handleSubmit}
+      />
+    </EditEntityLayout>
+  );
 }
 
 export default UserEdit;

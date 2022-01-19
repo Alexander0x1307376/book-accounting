@@ -15,7 +15,7 @@ const AuthorCreate: React.FC = () => {
   const handleSubmit = async (values: AuthorInput) => {
     try {
       await createAuthor(values).unwrap();
-      navigate('/authors/1');
+      navigate('/authors');
     } catch(e) {
       setDisplayError(true);
     }

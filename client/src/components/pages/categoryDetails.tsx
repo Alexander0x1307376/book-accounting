@@ -3,13 +3,14 @@ import { useParams } from 'react-router-dom';
 import ButtonRouterLink from '../shared/buttonRouterLink';
 import { Space, Spin, Descriptions } from 'antd';
 import { useCategoryDetailsQuery } from '../../store/services/categoriesApi';
+import EntityDetailsLayout from '../shared/entityDetailsLayout';
 const { Item } = Descriptions;
 
 const CategoryDetails: FC = () => {
   const { id } = useParams<any>();
   const { data, isLoading } = useCategoryDetailsQuery({uuid: id!, withParent: true});
 
-  const extra = <ButtonRouterLink to={`/category/${id}/edit`} type='primary'>
+  const extra = <ButtonRouterLink to={`/categories/${id}/edit`} type='primary'>
     Изменить
   </ButtonRouterLink>
 
@@ -21,33 +22,30 @@ const CategoryDetails: FC = () => {
     fontWeight: 400
   }
 
-  return (<>
-    {
-      isLoading && !data
-        ? (<>
-          <Space size='middle'>
-            <Spin size='large' />
-          </Space>
-        </>)
-        : (
-          <div>
-            <Descriptions
-              size='middle'
-              contentStyle={contentStyle}
-              labelStyle={labelStyle}
-              title='Об авторе'
-              extra={extra}
-              layout='vertical'
-              column={1}
-            >
-              <Item label='Код'>{data?.uuid}</Item>
-              <Item label='Имя'>{data?.name}</Item>
-              <Item label='Описание'>{data?.description}</Item>
-            </Descriptions>
-          </div>
-        )
-    }
-  </>)
+
+  return (
+    <EntityDetailsLayout
+      title='О категории'
+      isLoading={isLoading}
+      extra={
+        <ButtonRouterLink to={`/categories/${id}/edit`} type='primary'>
+          Изменить
+        </ButtonRouterLink>
+      }
+    >
+      <Descriptions
+        size='middle'
+        contentStyle={contentStyle}
+        labelStyle={labelStyle}
+        layout='vertical'
+        column={1}
+      >
+        <Item label='Код'>{data?.uuid}</Item>
+        <Item label='Имя'>{data?.name}</Item>
+        <Item label='Описание'>{data?.description || 'нет'}</Item>
+      </Descriptions>
+    </EntityDetailsLayout>
+  );
 }
 
-export default CategoryDetails
+export default CategoryDetails;

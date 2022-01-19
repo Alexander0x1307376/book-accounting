@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Typography, Alert } from "antd";
+import { Typography } from "antd";
 import EditAuthorForm from "../shared/forms/editAuthorForm";
 import { AuthorInput } from "../../types";
 import { useAuthorDetailsQuery, useEditAuthorMutation } from "../../store/services/authorsApi";
 import { useNavigate, useParams } from 'react-router-dom';
-const { Title } = Typography;
+import { useForm } from "antd/lib/form/Form";
+import EditEntityLayout from "../shared/editEntityLayout";
+import ButtonRouterLink from "../shared/buttonRouterLink";
+
 
 const AuthorEdit: React.FC = () => {
 
@@ -19,47 +22,41 @@ const AuthorEdit: React.FC = () => {
 
   const navigate = useNavigate();
   
+  const [form] = useForm();
 
   const handleSubmit = async (values: AuthorInput) => {
     try {
       await editAuthor({id: id!, data: values}).unwrap();
-      navigate('/authors/1');
+      navigate(`/authors/${id}`);
     } catch (e) {
       setDisplayError(true);
     }
   };
 
+
   return (
-    <div>
-      <Title>Редактировать автора</Title>
-      {
-        isAuthorLoading 
-        ? <p>loading...</p>
-          : (<>
-            <EditAuthorForm
-              recordData={{
-                name: authorData?.name || '',
-                birthDate: authorData?.birthDate,
-                deathDate: authorData?.deathDate,
-                description: authorData?.description || ''
-              }}
-              formLayout={'vertical'}
-              onSubmit={handleSubmit}
-            />
-            {
-              error && displayError
-              ? <Alert
-                message="Ошибка"
-                description="Сетевая ошибка при изменении автора"
-                type="error"
-                closable
-                onClose={() => setDisplayError(false)}
-              />
-              : null
-            }
-          </>)
+    <EditEntityLayout 
+      title={`Редактировать автора ${authorData?.name || ''}`}
+      error={error}
+      isLoading={isAuthorLoading}
+      extra={
+        <ButtonRouterLink to={`/authors/${id}`} type='default'>
+          К просмотру
+        </ButtonRouterLink>
       }
-    </div>
+    >
+      <EditAuthorForm
+        form={form}
+        recordData={{
+          name: authorData?.name || '',
+          birthDate: authorData?.birthDate,
+          deathDate: authorData?.deathDate,
+          description: authorData?.description
+        }}
+        formLayout={'vertical'}
+        onSubmit={handleSubmit}
+      />
+    </EditEntityLayout>
   );
 };
 

@@ -17,6 +17,7 @@ import CategoryEdit from '../components/pages/categoryEdit';
 import Users from '../components/pages/users';
 import UserDetails from '../components/pages/userDetails';
 import UserEdit from '../components/pages/userEdit';
+import Empty from '../components/pages/empty';
 
 export const routes: RouteObject[] = [
   {
@@ -36,64 +37,90 @@ export const routes: RouteObject[] = [
       {
         path: 'authors/:page',
         element: <Authors />,
+        children: [
+          {
+            path: '/authors/:page',
+            element: <Empty />,
+          },
+          {
+            path: 'create',
+            element: <AuthorCreate />,
+          },
+          {
+            path: ':id/edit',
+            element: <AuthorEdit />,
+          },
+          {
+            path: ':id',
+            element: <AuthorDetails />,
+          },
+        ]
       },
-      {
-        path: 'author/create',
-        element: <AuthorCreate />,
-      },
-      {
-        path: 'author/:id/edit',
-        element: <AuthorEdit />,
-      },
-      {
-        path: 'author/:id',
-        element: <AuthorDetails />,
-      },
+      
       // Книги
       {
-        path: 'books/:page',
+        path: 'books',
         element: <Books />,
-      },
-      {
-        path: 'book/create',
-        element: <BookCreate />,
-      },
-      {
-        path: 'book/:id/edit',
-        element: <BookEdit />,
-      },
-      {
-        path: 'book/:id',
-        element: <BookDetails />,
+        children: [
+          {
+            path: '/books',
+            element: <Empty />,
+          },
+          {
+            path: 'create',
+            element: <BookCreate />,
+          },
+          {
+            path: ':id/edit',
+            element: <BookEdit />,
+          },
+          {
+            path: ':id',
+            element: <BookDetails />,
+          },
+        ]
       },
       // Категории
       {
-        path: 'categories/:page',
+        path: 'categories',
         element: <Categories />,
+        children: [
+          {
+            path: '/categories',
+            element: <Empty />,
+          },
+          {
+            path: 'create',
+            element: <CategoryCreate />,
+          },
+          {
+            path: ':id/edit',
+            element: <CategoryEdit />,
+          },
+          {
+            path: ':id',
+            element: <CategoryDetails />,
+          },
+        ]
       },
+      // Пользователи
       {
-        path: 'category/create',
-        element: <CategoryCreate />,
-      },
-      {
-        path: 'category/:id/edit',
-        element: <CategoryEdit />,
-      },
-      {
-        path: 'category/:id',
-        element: <CategoryDetails />,
-      },
-      {
-        path: 'users/:page',
+        path: 'users',
         element: <Users />,
-      },
-      {
-        path: 'user/:id',
-        element: <UserDetails />,
-      },
-      {
-        path: 'user/:id/edit',
-        element: <UserEdit />
+        children: [
+          {
+            path: '/users',
+            element: <Empty />,
+          },
+          {
+            path: ':id',
+            element: <UserDetails />,
+          },
+          {
+            path: ':id/edit',
+            element: <UserEdit />
+          },
+        ]
       },
     ]
   }

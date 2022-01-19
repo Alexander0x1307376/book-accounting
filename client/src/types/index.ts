@@ -1,3 +1,5 @@
+import {Moment} from 'moment';
+
 export type Pagination<T> = {
   list: T[];
   page: number;
@@ -48,8 +50,8 @@ export type AuthorListResponse = Pagination<AuthorRecord>
 // данные ввода при создании записи
 export interface AuthorInput {
   name: string;
-  birthDate?: string;
-  deathDate?: string;
+  birthDate?: string | Moment;
+  deathDate?: string | Moment;
   description?: string;
 }
 

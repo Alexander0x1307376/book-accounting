@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { BookInput, FullBookInput } from "../../../types";
 import { Form, Input, Button, FormInstance } from "antd";
 import CategoryInput from "../relationField/categoryInput";
@@ -43,24 +43,30 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
     })
   };
 
-  const initialValues = useMemo(() => ({
-    ...recordData,
-    category: {
-      value: recordData?.category?.uuid,
-      label: recordData?.category?.name,
-    },
-    authors: recordData?.authors?.map(({uuid, name}) => ({
-      value: uuid,
-      label: name
-    })) || []
-  }), [recordData]);
+
+  useEffect(() => {
+
+    const initialValues = {
+      ...recordData,
+      category: {
+        value: recordData?.category?.uuid,
+        label: recordData?.category?.name,
+      },
+      authors: recordData?.authors?.map(({ uuid, name }) => ({
+        value: uuid,
+        label: name
+      })) || []
+    };
+
+    form?.setFieldsValue(initialValues);
+
+  }, [recordData]);
 
 
   return (
     <Form
       {...layout}
       layout={formLayout}
-      initialValues={initialValues}
       onFinish={onFinish}
       form={form}
     >
@@ -92,7 +98,10 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
       </Form.Item>
 
       <Form.Item name="description" label="Описание">
-        <Input.TextArea />
+        <Input.TextArea autoSize={{
+          minRows: 5,
+          maxRows: 20
+        }}/>
       </Form.Item>
 
       {
