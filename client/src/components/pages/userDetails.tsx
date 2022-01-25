@@ -23,7 +23,7 @@ const UserDetails: FC = () => {
       title='Информация о пользователе'
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/users/${id}/edit`} type='primary'>
+        <ButtonRouterLink to={`${id}/edit`} type='primary'>
           Изменить
         </ButtonRouterLink>
       }

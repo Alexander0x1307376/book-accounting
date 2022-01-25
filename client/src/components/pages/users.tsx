@@ -62,8 +62,8 @@ const Users: React.FC = () => {
       onRetryClick: () => refetch()
     } : undefined}
     actionClickHandlers={{
-      editClick: (id) => navigate(`/users/${id}/edit`),
-      detailsClick: (id) => navigate(`/users/${id}`),
+      editClick: (id) => navigate(`${id}/edit`),
+      detailsClick: (id) => navigate(`${id}`),
       deleteClick: async (id) => {
         await deleteUser(id);
       },

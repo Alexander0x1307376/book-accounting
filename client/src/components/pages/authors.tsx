@@ -74,8 +74,8 @@ const Authors: FC = () => {
       onRetryClick: () => refetch()
     } : undefined}
     actionClickHandlers={{
-      editClick: (id) => navigate(`/authors/${id}/edit`),
-      detailsClick: (id) => navigate(`/authors/${id}`),
+      editClick: (id) => navigate(`${id}/edit`),
+      detailsClick: (id) => navigate(`${id}`),
       deleteClick: (id) => deleteAuthor(id)
     }}
   />);

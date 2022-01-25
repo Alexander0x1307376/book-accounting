@@ -1,7 +1,12 @@
-import { FC } from "react";
-import LoginForm from "../shared/loginForm";
+import { FC, useState } from "react";
+import LoginForm, { LoginFieldsData } from "../shared/loginForm";
 import styled from "styled-components";
-import { Card } from 'antd';
+import { Alert, Card, Spin } from 'antd';
+import { useLoginMutation } from "../../store/services/authService";
+import { LoginRequest } from "../../types";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/authSlice";
+import { useNavigate } from "react-router-dom";
 
 
 const CenterdedBlock = styled.div`
@@ -15,10 +20,43 @@ const CenterdedBlock = styled.div`
 
 
 const Login: FC = () => {
+
+  const [login, {isLoading}] = useLoginMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [displayError, setDisplayError] = useState<boolean>(false);
+
+  const onFinish = async (data: LoginRequest) => {
+    try {
+      const result = await login(data).unwrap();
+      // dispatch(setUser(result));
+      navigate('/');
+    } catch (err) {
+      setDisplayError(true);
+    }
+  }
+
   return (
     <CenterdedBlock>
       <Card title="Вход в систему" style={{width: 400}}>
-        <LoginForm onFinish={() => {}}/>
+        <Spin spinning={isLoading} tip="Отправка..." delay={100}>
+          <LoginForm onFinish={onFinish} />
+        </Spin>
+        {
+          displayError
+          ? (
+            <Alert
+              message="Ошибка входа"
+              description="Неверный логин или пароль"
+              type="error"
+              closable
+              showIcon
+              afterClose={() => setDisplayError(false)}
+            />
+          )
+          : undefined
+        }
       </Card>
     </CenterdedBlock>
   )

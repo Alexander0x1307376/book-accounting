@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import EditCategoryForm from "../shared/forms/editCategoryForm";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Alert } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
 import { useCategoryDetailsQuery, useEditCategoryMutation } from "../../store/services/categoriesApi";
 import { CategoryInput, FullCategoryInput } from "../../types";
 import { useForm } from "antd/lib/form/Form";
 import EditEntityLayout from "../shared/editEntityLayout";
 import ButtonRouterLink from "../shared/buttonRouterLink";
-
-const { Title } = Typography;
 
 
 const CategoryEdit: React.FC = () => {
@@ -50,7 +46,7 @@ const CategoryEdit: React.FC = () => {
       error={error}
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/categories/${id}`} type='default'>
+        <ButtonRouterLink to={`../${id}`} type='default'>
           К просмотру
         </ButtonRouterLink>
       }

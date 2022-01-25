@@ -40,7 +40,7 @@ const AuthorEdit: React.FC = () => {
       error={error}
       isLoading={isAuthorLoading}
       extra={
-        <ButtonRouterLink to={`/authors/${id}`} type='default'>
+        <ButtonRouterLink to={`../${id}`} type='default'>
           К просмотру
         </ButtonRouterLink>
       }

@@ -1,5 +1,5 @@
 import React, { useState } from "react"; 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useBookDetailsQuery, useEditBookMutation } from "../../store/services/booksApi";
 import { BookInput, FullBookInput } from "../../types";
 import EditBookForm from "../shared/forms/editBookForm";
@@ -21,6 +21,10 @@ const BookEdit: React.FC = () => {
   } = useBookDetailsQuery({
     uuid: id!, withAuthors: true, withCategory: true
   });
+
+
+  const location = useLocation();
+  console.log('bookEditLocation', location);
 
   const [ editBook ] = useEditBookMutation();
 
@@ -51,7 +55,7 @@ const BookEdit: React.FC = () => {
       error={error}
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/books/${id}`} type='default'>
+        <ButtonRouterLink to={`../${id}`} type='default'>
           К просмотру
         </ButtonRouterLink>
       }

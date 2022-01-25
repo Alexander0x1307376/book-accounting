@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import EditUserForm from "../shared/forms/editUserForm";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Typography, Alert } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
 import { useUserDetailsQuery, useEditUserMutation } from "../../store/services/usersApi";
 import { UserInput } from "../../types";
 import EditEntityLayout from "../shared/editEntityLayout";
 import ButtonRouterLink from "../shared/buttonRouterLink";
-
-const { Title } = Typography;
 
 
 const UserEdit: React.FC = () => {
@@ -50,7 +46,7 @@ const UserEdit: React.FC = () => {
       error={error}
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/users/${id}`} type='default'>
+        <ButtonRouterLink to={`../${id}`} type='default'>
           К просмотру
         </ButtonRouterLink>
       }

@@ -47,8 +47,8 @@ const Books: FC = () => {
         onRetryClick: () => refetch()
       } : undefined}
       actionClickHandlers={{
-        editClick: (id) => navigate(`/books/${id}/edit`),
-        detailsClick: (id) => navigate(`/books/${id}`),
+        editClick: (id) => navigate(`${id}/edit`),
+        detailsClick: (id) => navigate(`${id}`),
         deleteClick: (id) => deleteBook(id),
       }}
     />

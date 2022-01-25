@@ -4,7 +4,7 @@ import BookDetails from '../components/pages/bookDetails';
 import Books from '../components/pages/books';
 import Categories from '../components/pages/categories';
 import CategoryDetails from '../components/pages/categoryDetails';
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import Main from '../components/layouts/main';
 import Dashboard from '../components/pages/dashboard';
 import Login from '../components/layouts/login';
@@ -35,6 +35,10 @@ export const routes: RouteObject[] = [
       },
       // Автор
       {
+        path: 'authors',
+        element: <Navigate to="/authors/1" />
+      },
+      {
         path: 'authors/:page',
         element: <Authors />,
         children: [
@@ -60,10 +64,14 @@ export const routes: RouteObject[] = [
       // Книги
       {
         path: 'books',
+        element: <Navigate to="/books/1" />
+      },
+      {
+        path: 'books/:page',
         element: <Books />,
         children: [
           {
-            path: '/books',
+            path: '/books/:page',
             element: <Empty />,
           },
           {
@@ -83,10 +91,14 @@ export const routes: RouteObject[] = [
       // Категории
       {
         path: 'categories',
+        element: <Navigate to="/categories/1" />
+      },
+      {
+        path: 'categories/:page',
         element: <Categories />,
         children: [
           {
-            path: '/categories',
+            path: '/categories/:page',
             element: <Empty />,
           },
           {
@@ -106,10 +118,14 @@ export const routes: RouteObject[] = [
       // Пользователи
       {
         path: 'users',
+        element: <Navigate to="/users/1" />
+      },
+      {
+        path: 'users/:page',
         element: <Users />,
         children: [
           {
-            path: '/users',
+            path: '/users/:page',
             element: <Empty />,
           },
           {

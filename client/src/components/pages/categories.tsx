@@ -26,8 +26,6 @@ const Categories: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading, refetch } = useCategoriesQuery(currentPage);
   
-  const requestError = error as any;
-
 
   const [ deleteCategory ] = useDeleteCategoryMutation();
 
@@ -48,8 +46,8 @@ const Categories: FC = () => {
     isLoading,
     data: categoriesTree || [],
     actionClickHandlers: {
-      editClick: (id) => navigate(`/categories/${id}/edit`),
-      detailsClick: (id) => navigate(`/categories/${id}`),
+      editClick: (id) => navigate(`${id}/edit`),
+      detailsClick: (id) => navigate(`${id}`),
       deleteClick: (id) => deleteCategory(id)
     },
   }

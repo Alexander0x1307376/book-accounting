@@ -33,7 +33,6 @@ export interface UserInput {
 // #endregion
 
 
-
 // #region автор
 
 // ответ сервера - запись автора
@@ -146,6 +145,31 @@ export type TreeView = {
   key: string,
   isLeaf?: boolean,
   children?: TreeView[]
+}
+
+// #endregion
+
+
+// #region Аутентификация
+
+export interface LoginRequest {
+  login: string,
+  password: string,
+  rememberMe: boolean
+}
+
+export interface LoginResponse {
+  accessToken: string,
+  refreshToken: string,
+  userData: {
+    uuid: string,
+    name: string
+  }
+}
+
+export interface User {
+  uuid: string,
+  name: string
 }
 
 // #endregion

@@ -30,7 +30,7 @@ const BookDetails: FC = () => {
       title='О книге'
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/books/${id}/edit`} type='primary'>
+        <ButtonRouterLink to={`edit`} type='primary'>
           Изменить
         </ButtonRouterLink>
       }

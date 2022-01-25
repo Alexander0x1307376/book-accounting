@@ -1,7 +1,7 @@
-import React, { FC, CSSProperties } from 'react';
+import { FC, CSSProperties } from 'react';
 import { useParams } from 'react-router-dom';
 import ButtonRouterLink from '../shared/buttonRouterLink';
-import { Space, Spin, Descriptions } from 'antd';
+import { Descriptions } from 'antd';
 import { useCategoryDetailsQuery } from '../../store/services/categoriesApi';
 import EntityDetailsLayout from '../shared/entityDetailsLayout';
 const { Item } = Descriptions;
@@ -9,10 +9,6 @@ const { Item } = Descriptions;
 const CategoryDetails: FC = () => {
   const { id } = useParams<any>();
   const { data, isLoading } = useCategoryDetailsQuery({uuid: id!, withParent: true});
-
-  const extra = <ButtonRouterLink to={`/categories/${id}/edit`} type='primary'>
-    Изменить
-  </ButtonRouterLink>
 
   const labelStyle: CSSProperties = {
     padding: 0
@@ -28,7 +24,7 @@ const CategoryDetails: FC = () => {
       title='О категории'
       isLoading={isLoading}
       extra={
-        <ButtonRouterLink to={`/categories/${id}/edit`} type='primary'>
+        <ButtonRouterLink to={`edit`} type='primary'>
           Изменить
         </ButtonRouterLink>
       }
