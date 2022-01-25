@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { CategoryInput, CategoryListResponse, CategoryRecord } from '../../types';
 import { insertCategories } from '../categoriesSlice';
+import { baseQueryWithReauth } from '../utils/reauthBaseQuery';
 
 
 
@@ -12,6 +13,7 @@ type CategoryDetailsParams = {
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
+  // baseQuery: baseQueryWithReauth,
   tagTypes: ['Category'],
   endpoints: build => ({
 
@@ -40,7 +42,7 @@ export const categoriesApi = createApi({
     // query < response , request >
     categoriesRoots: build.query<CategoryRecord[], void>({
       query: () => `categories/root`,
-      onQueryStarted: async(id, { dispatch, queryFulfilled }) => {
+      onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           dispatch(insertCategories({children: data}));

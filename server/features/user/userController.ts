@@ -1,16 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
 import { controllerFunction as cf } from '../controller';
+import userService from './userService';
 
 
 export default {
 
-  list: cf((req, res) => {
-    res.json('userlist');
+  list: cf(async (req, res) => {
+    const { page } = req.params;
+    const result = await userService.getList(+page);
+    res.json(result);
   }),
 
 
-  show: cf((req, res) => {
-    res.json('usershow');
+  show: cf(async (req, res) => {
+    const { id } = req.params;
+    const result = await userService.getItem(id);
+    res.json(result);
   }),
   
   

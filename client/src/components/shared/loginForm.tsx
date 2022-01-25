@@ -1,15 +1,12 @@
 import { Form, Input, Button, Checkbox } from 'antd';
 import { FC } from 'react';
+import { LoginRequest } from '../../types';
 
 
-type FieldsData = {
-  login: string,
-  password: string,
-  rememberMe: boolean
-}
+export type LoginFieldsData = LoginRequest;
 
 export interface LoginFormProps {
-  onFinish: (values: FieldsData) => void,
+  onFinish: (values: LoginFieldsData) => void,
   onError?: (error: any) => void
 } 
 

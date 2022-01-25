@@ -11,4 +11,7 @@ export class UserToken extends Model {
 
   @ManyToOne(() => User, user => user.refreshTokens)
   user: User
+
+  @Column()
+  userId: number;
 }

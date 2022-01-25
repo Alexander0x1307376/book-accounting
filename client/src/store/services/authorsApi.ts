@@ -1,9 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { AuthorInput, AuthorListResponse, AuthorRecord } from '../../types';
+import { baseQueryWithReauth } from '../utils/reauthBaseQuery';
 
 export const authorsApi = createApi({
   reducerPath: 'authorsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
+  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Author'],
   endpoints: build => ({
 

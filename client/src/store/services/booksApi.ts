@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { BookInput, BookListResponse, BookRecord } from '../../types';
+import { baseQueryWithReauth } from '../utils/reauthBaseQuery';
 
 
 
@@ -12,6 +13,7 @@ type BookDetailsParams = {
 export const booksApi = createApi({
   reducerPath: 'booksApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
+  // baseQuery: baseQueryWithReauth,
   tagTypes: ['Book'],
   endpoints: build => ({
 
