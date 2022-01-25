@@ -1,5 +1,5 @@
 import React, { useState } from "react"; 
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useBookDetailsQuery, useEditBookMutation } from "../../store/services/booksApi";
 import { BookInput, FullBookInput } from "../../types";
 import EditBookForm from "../shared/forms/editBookForm";
@@ -22,9 +22,6 @@ const BookEdit: React.FC = () => {
     uuid: id!, withAuthors: true, withCategory: true
   });
 
-
-  const location = useLocation();
-  console.log('bookEditLocation', location);
 
   const [ editBook ] = useEditBookMutation();
 

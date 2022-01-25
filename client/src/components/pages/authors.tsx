@@ -64,7 +64,6 @@ const Authors: FC = () => {
       pageSize: data?.rowsPerPage || 1,
       total: data?.total || 1,
       onChange: (changedPage) => {
-        // window.history.replaceState(null, '', `${changedPage}`);
         setCurrentPage(changedPage);
       }
     }}

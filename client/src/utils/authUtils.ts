@@ -5,7 +5,7 @@ import { UserState } from "../store/authSlice";
 export const checkTokenExpiration = (token: string) => {
   const currentDate = Math.floor(Date.now() / 1000);
   const refreshTokenExpiration = jwtDecode<any>(token).exp;
-  return refreshTokenExpiration > currentDate;
+  return refreshTokenExpiration < currentDate;
 } 
 
 

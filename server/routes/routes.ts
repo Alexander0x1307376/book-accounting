@@ -18,31 +18,73 @@ router.get('/refresh', authController.refreshToken);
 
 
 
-router.get('/users/:page', userController.list);
-router.post('/user/create', userController.create);
-router.post('/user/:id/edit', userController.edit);
-router.post('/user/:id/delete', userController.remove);
-router.get('/user/:id', userController.show);
+router.get('/users/:page', authMiddleware, userController.list);
+router.post('/user/create', authMiddleware, userController.create);
+router.post('/user/:id/edit', authMiddleware, userController.edit);
+router.post('/user/:id/delete', authMiddleware, userController.remove);
+router.get('/user/:id', authMiddleware, userController.show);
 
 
 
-router.get('/categories/root', categoryController.root);
-router.get('/categories/search', categoryController.search);
-router.get('/categories/:page', categoryController.list);
-router.post('/category/create', categoryController.create);
-router.post('/category/:id/edit', categoryController.edit);
-router.delete('/category/:id/delete', categoryController.remove);
-router.get('/category/:id/books', categoryController.categoryWithBooks);
-router.get('/category/:id/children', categoryController.categoryChildren);
-router.get('/category/:id', categoryController.show);
+router.get('/categories/root', 
+  authMiddleware,
+  categoryController.root
+);
+router.get('/categories/search', 
+  authMiddleware, 
+  categoryController.search
+);
+router.get('/categories/:page', 
+  authMiddleware,
+  categoryController.list
+);
+router.post('/category/create', 
+  authMiddleware,
+  categoryController.create
+);
+router.post('/category/:id/edit', 
+  authMiddleware,
+  categoryController.edit
+);
+router.delete('/category/:id/delete', 
+  authMiddleware,
+  categoryController.remove
+);
+router.get('/category/:id/books', 
+  authMiddleware,
+  categoryController.categoryWithBooks
+);
+router.get('/category/:id/children', 
+  authMiddleware,
+  categoryController.categoryChildren
+);
+router.get('/category/:id', 
+  authMiddleware,
+  categoryController.show
+);
 
 
 
-router.get('/books/:page', bookController.list);
-router.post('/book/create', bookController.create);
-router.post('/book/:id/edit', bookController.edit);
-router.delete('/book/:id/delete', bookController.remove);
-router.get('/book/:id', bookController.show);
+router.get('/books/:page', 
+  bookController.list,
+  authMiddleware,
+);
+router.post('/book/create', 
+  authMiddleware, 
+  bookController.create
+);
+router.post('/book/:id/edit', 
+  authMiddleware, 
+  bookController.edit
+);
+router.delete('/book/:id/delete', 
+  authMiddleware, 
+  bookController.remove
+);
+router.get('/book/:id', 
+  authMiddleware, 
+  bookController.show
+);
 
 
 

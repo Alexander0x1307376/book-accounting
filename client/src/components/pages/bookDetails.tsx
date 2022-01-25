@@ -23,8 +23,6 @@ const BookDetails: FC = () => {
     fontWeight: 400
   }
 
-  console.log('book', data);
-
   return (
     <EntityDetailsLayout
       title='О книге'
@@ -36,16 +34,13 @@ const BookDetails: FC = () => {
       }
     >
       <Descriptions
-        // size='middle'
         contentStyle={contentStyle}
         labelStyle={labelStyle}
         layout='vertical'
         column={1}
       >
         <Item label='Код'>{data?.uuid}</Item>
-        <Item label='Имя'>
-          {data?.name}
-        </Item>
+        <Item label='Имя'>{data?.name}</Item>
         <Item label='Категория'>
           <Link to={`/categories/${data?.category?.uuid}`}>
             <Typography.Text underline>{data?.category?.name}</Typography.Text>

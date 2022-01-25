@@ -18,6 +18,7 @@ import Users from '../components/pages/users';
 import UserDetails from '../components/pages/userDetails';
 import UserEdit from '../components/pages/userEdit';
 import Empty from '../components/pages/empty';
+import AuthRoute from '../components/shared/authRoute';
 
 export const routes: RouteObject[] = [
   {
@@ -25,8 +26,12 @@ export const routes: RouteObject[] = [
     element: <Login />,
   },
   {
+    path: '/logout',
+    element: <Navigate to="/login" />,
+  },
+  {
     path: '/',
-    element: <Main />,
+    element: <AuthRoute><Main /></AuthRoute>,
     children: [
       {
         index: true,

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import jwtDecode from "jwt-decode";
 import { LoginRequest, LoginResponse } from "../../types";
 import { clearUserData, setUserData } from "../../utils/authUtils";
-import { setUser } from "../authSlice";
+import { clearUser, setUser } from "../authSlice";
 import { RootState } from "../store";
 
 
@@ -40,11 +40,17 @@ export const authApi = createApi({
       }),
       onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
         clearUserData();
+        dispatch(clearUser());
       }
     }),
-    refresh: build.query<any, any>({
-      query: () => 'refresh'
-    })
+    // refresh: build.query<any, any>({
+    //   query: () => 'refresh',
+    //   onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
+    //     const { data } = await queryFulfilled;
+    //     setUserData(data);
+    //     dispatch(setUser(data));
+    //   }
+    // })
   })
 });
 

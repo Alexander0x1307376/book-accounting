@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import { Avatar, Button, Card, Popover } from 'antd';
-import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { LogoutOutlined } from '@ant-design/icons';
 import { useAuth } from '../../hooks/useAuth';
 
 const AccountWidget: React.FC = () => {
@@ -11,28 +11,32 @@ const AccountWidget: React.FC = () => {
   }
 
 
-  const {userData: {uuid, name}} = useAuth();
-
-  console.log('userName', name);
-  console.log('userUuid', uuid);
+  const {user: {userData: { name }}, logout} = useAuth();
 
   return (
-    <Card style={{borderRadius: 0}}>
-      <Popover
-        content={<AccountOptionsMenu />}
-        trigger="click"
-      >
+    <Card style={{ borderRadius: 0}}>
       <Card.Meta
-        avatar={ <Avatar src={userData.imgUrl} /> }
+        avatar={
+          <Popover
+            content={<AccountOptionsMenu onLogoutClick={logout} />}
+            trigger="click"
+            placement='right'
+          >
+            <Avatar src={userData.imgUrl} style={{ cursor: 'pointer'}} /> 
+          </Popover>
+        }
         title={name}
-        />
-      </Popover>
+        />      
     </Card>
   )
 }
 
 
-const AccountOptionsMenu: React.FC = () => {
+interface AccountOptionsMenuProps {
+  onLogoutClick: VoidFunction;
+}
+
+const AccountOptionsMenu: React.FC<AccountOptionsMenuProps> = ({ onLogoutClick }) => {
 
   const buttonStyle: CSSProperties = {
     textAlign: 'start',
@@ -40,8 +44,16 @@ const AccountOptionsMenu: React.FC = () => {
 
   return (
     <div>
-      <Button style={buttonStyle} icon={<SettingOutlined />} block type="text">Настройки</Button>
-      <Button style={buttonStyle} icon={<LogoutOutlined />} block type="text">Выйти</Button>
+      {/* <Button style={buttonStyle} icon={<SettingOutlined />} block type="text">Настройки</Button> */}
+      <Button 
+        style={buttonStyle} 
+        icon={<LogoutOutlined />} 
+        block 
+        type="text"
+        onClick={onLogoutClick}
+      >
+        Выйти
+      </Button>
     </div>
   )
 }

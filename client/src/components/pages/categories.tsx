@@ -1,9 +1,8 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectCategoriesTree } from '../../store/categoriesSlice';
 import { 
-  useCategoriesQuery, 
   useCategoriesRootsQuery, 
   useDeleteCategoryMutation, 
   useLazyCategoryChildrenQuery 
@@ -23,8 +22,6 @@ const columns = [
 const Categories: FC = () => {
 
   const { id } = useParams();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const { data, error, isLoading, refetch } = useCategoriesQuery(currentPage);
   
 
   const [ deleteCategory ] = useDeleteCategoryMutation();
@@ -33,7 +30,7 @@ const Categories: FC = () => {
 
 
   const categories = useSelector(selectCategoriesTree);
-  useCategoriesRootsQuery();
+  const { error, isLoading, refetch } = useCategoriesRootsQuery();
   const [fetchChildren] = useLazyCategoryChildrenQuery();
   const categoriesTree = useMemo(() => generateTreeForTable(categories), [categories]);
 

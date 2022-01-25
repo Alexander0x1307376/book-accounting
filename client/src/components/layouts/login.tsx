@@ -1,12 +1,10 @@
 import { FC, useState } from "react";
-import LoginForm, { LoginFieldsData } from "../shared/loginForm";
+import LoginForm from "../shared/loginForm";
 import styled from "styled-components";
 import { Alert, Card, Spin } from 'antd';
 import { useLoginMutation } from "../../store/services/authService";
 import { LoginRequest } from "../../types";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../store/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const CenterdedBlock = styled.div`
@@ -22,16 +20,16 @@ const CenterdedBlock = styled.div`
 const Login: FC = () => {
 
   const [login, {isLoading}] = useLoginMutation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location as any).state?.from?.pathname || "/";
 
   const [displayError, setDisplayError] = useState<boolean>(false);
 
   const onFinish = async (data: LoginRequest) => {
     try {
-      const result = await login(data).unwrap();
-      // dispatch(setUser(result));
-      navigate('/');
+      await login(data).unwrap();
+      navigate(from);
     } catch (err) {
       setDisplayError(true);
     }
