@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateCategoryMutation } from "../../store/services/categoriesApi";
 import { CategoryInput } from "../../types";
+import EditEntityLayout from "../shared/editEntityLayout";
 import EditCategoryForm from "../shared/forms/editCategoryForm";
 
 const CategoryCreate: React.FC = () => {
@@ -20,24 +21,18 @@ const CategoryCreate: React.FC = () => {
     }
   };
 
-  return (<div>
+  return (
+    <EditEntityLayout
+      title='Добавить категорию'
+      error={error}
+    >
     <EditCategoryForm 
       withoutCreateParent={false}
       onSubmit={handleSubmit}
       formLayout="vertical"
     />
-    {
-      error && displayError
-      ? <Alert
-        message="Ошибка"
-        description="Не удалось создать категорию"
-        type="error"
-        closable
-        onClose={() => setDisplayError(false)}
-      />
-      : null
-    }
-  </div>)
+    </EditEntityLayout>
+  )
 }
 
 export default CategoryCreate;

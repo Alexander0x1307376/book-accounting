@@ -37,7 +37,7 @@ const Categories: FC = () => {
   const crudListParams: CrudLayoutProps = {
     recordIdentifier: 'key',
     title: 'Категории',
-    createLink: '/categories/create',
+    createLink: 'create',
     createButtonText: 'Добавить категорию',
     tableHeaders: columns,
     isLoading,

@@ -46,7 +46,7 @@ const Authors: FC = () => {
 
   return (<CrudLayout 
     title="Авторы"
-    createLink="/authors/create"
+    createLink="create"
     createButtonText="Добавить автора"
     // tableHeaders={columns}
     tableProps={{

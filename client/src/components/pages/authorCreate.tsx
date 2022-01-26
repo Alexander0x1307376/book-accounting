@@ -4,6 +4,7 @@ import EditAuthorForm from "../shared/forms/editAuthorForm";
 import { AuthorInput } from "../../types";
 import { useCreateAuthorMutation } from "../../store/services/authorsApi";
 import { useNavigate } from 'react-router-dom';
+import EditEntityLayout from "../shared/editEntityLayout";
 const { Title } = Typography;
 
 const AuthorCreate: React.FC = () => {
@@ -22,24 +23,15 @@ const AuthorCreate: React.FC = () => {
   };
 
   return (
-    <div>
-      <Title>Добавить автора</Title>
-      <EditAuthorForm 
-        formLayout={'vertical'} 
-        onSubmit={handleSubmit} 
+    <EditEntityLayout
+      title='Добавить автора'
+      error={error}
+    >
+      <EditAuthorForm
+        formLayout={'vertical'}
+        onSubmit={handleSubmit}
       />
-      {
-        error && displayError
-        ? <Alert
-          message="Ошибка"
-          description="Не удалось создать автора"
-          type="error"
-          closable
-          onClose={() => setDisplayError(false)}
-        /> 
-        : null
-      }
-    </div>
+    </EditEntityLayout>
   );
 };
 

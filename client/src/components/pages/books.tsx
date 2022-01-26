@@ -20,7 +20,7 @@ const Books: FC = () => {
   return (
     <CrudLayout
       title="Книги"
-      createLink="/books/create"
+      createLink="create"
       createButtonText="Добавить книгу"
       tableProps={{
         rowSelection: {
