@@ -12,5 +12,5 @@ export interface BookPostData {
   description: string,
   categoryId?: string,
   authorsIds?: string[],
-  imageUrl?: string
+  imageId?: string
 }

@@ -19,7 +19,7 @@ const BookEdit: React.FC = () => {
   const {
     data: bookDetails, isLoading, error
   } = useBookDetailsQuery({
-    uuid: id!, withAuthors: true, withCategory: true
+    uuid: id!, withAuthors: true, withCategory: true, withImage: true
   });
 
 
@@ -39,7 +39,7 @@ const BookEdit: React.FC = () => {
     ? undefined : {
       isbn: bookDetails.isbn,
       name: bookDetails.name,
-      imageUrl: bookDetails.imageUrl,
+      image: bookDetails.image,
       description: bookDetails.description,
       category: bookDetails.category,
       authors: bookDetails.authors

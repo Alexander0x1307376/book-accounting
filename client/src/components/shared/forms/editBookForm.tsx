@@ -33,6 +33,7 @@ const beforeUpload = (file: any) => {
 };
 
 const baseUrl = 'http://localhost:8000/';
+const uploadUrl = baseUrl + 'upload-image';
 
 
 const EditBookForm: React.FC<EditBookFormProps> = ({
@@ -64,7 +65,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
     const submitData = {
       isbn: values.isbn,
       name: values.name,
-      imageUrl: imageData[0].response.path,
+      imageId: imageData[0].response.uuid,
       description: values.description,
       categoryId: values.category.value,
       authorsIds: values.authors.map(({ value }: any) => value)
@@ -74,13 +75,13 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
 
   useEffect(() => {
 
-
-    setImageData([{
-      uid: '-1',
-      name: recordData?.imageUrl,
-      status: 'done',
-      url: baseUrl + recordData?.imageUrl
-    }]);
+    if(recordData?.image) 
+      setImageData([{
+        uid: '-1',
+        name: recordData.image.path,
+        status: 'done',
+        url: baseUrl + recordData.image.path
+      }]);
 
 
     const initialValues = {
@@ -121,7 +122,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
         <Upload 
           name="image"
           listType="picture-card"
-          action={baseUrl + 'upload'}
+          action={uploadUrl}
           beforeUpload={beforeUpload}
           onChange={handleChange}
           fileList={imageData}

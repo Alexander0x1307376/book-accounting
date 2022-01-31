@@ -8,6 +8,7 @@ type BookDetailsParams = {
   uuid: string; 
   withCategory: boolean; 
   withAuthors: boolean; 
+  withImage: boolean; 
 }
 
 export const booksApi = createApi({
@@ -28,12 +29,13 @@ export const booksApi = createApi({
 
     // query < response , request >
     bookDetails: build.query<BookRecord, BookDetailsParams>({
-      query: ({uuid, withCategory, withAuthors}) => ({
+      query: ({uuid, withCategory, withAuthors, withImage}) => ({
         url: `book/${uuid}`,
         method: 'GET',
         params: {
           withCategory,
-          withAuthors 
+          withAuthors,
+          withImage
         }
       }),
       providesTags: ['Book']

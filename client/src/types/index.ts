@@ -59,11 +59,16 @@ export interface AuthorInput {
 
 // #region книги
 
+// детальные данные одной записи
 export type BookRecord = {
   name: string;
   isbn: string;
   description?: string;
-  imageUrl?: string;
+  image?: {
+    path: string;
+    uuid: string;
+    name: string;
+  };
   authors?: Pick<AuthorRecord, "uuid" | "name">[];
   category?: Pick<CategoryRecord, "uuid" | "name">;
 } & BaseRecord;
@@ -74,7 +79,7 @@ export type BookListResponse = Pagination<BookRecord>
 export interface BookInput {
   name: string;
   isbn: string;
-  imageUrl?: string;
+  imageId?: string;
   description?: string;
   categoryId?: string;
   authorsIds?: string[];
@@ -85,7 +90,11 @@ export interface FullBookInput {
   name: string;
   isbn: string;
   description?: string;
-  imageUrl?: string;
+  image?: {
+    path: string;
+    uuid: string;
+    name: string;
+  };
   category?: {
     uuid: string;
     name: string;

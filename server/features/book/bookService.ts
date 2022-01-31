@@ -4,6 +4,7 @@ import { getPaginatedList } from "../../utils/serviceUtils";
 import { BookPostData } from "./bookTypes";
 import { Category } from "../../entity/Category";
 import { Author } from "../../entity/Author";
+import { Image } from "../../entity/Image";
 
 
 export const getList = async (page: number, rowsPerPage = 10) => {
@@ -39,12 +40,13 @@ WHERE books.uuid = :id;
 type BookGetItemConfig = {
   withCategory?: boolean;
   withAuthors?: boolean;
+  withImage?: boolean;
 };
 
 export const getItem = async (
   uuid: string, config?: BookGetItemConfig
 ) => {
-  const { withCategory, withAuthors } = config!;
+  const { withCategory, withAuthors, withImage } = config!;
   
   const bookQueryBuilder = getRepository(Book).createQueryBuilder('book')
     .where({ uuid });
@@ -61,14 +63,24 @@ export const getItem = async (
     .leftJoin('book.authors', 'authors')
   }
 
+  if (withImage) {
+    bookQueryBuilder
+    .addSelect(['image.uuid', 'image.name', 'image.path'])
+    .leftJoin('book.image', 'image')
+  }
+
   return await bookQueryBuilder.getOne();
 }
 
 
-
 export const create = async (data: BookPostData) => {
 
-  const { name, isbn, description, categoryId, authorsIds, imageUrl } = data;
+  const { name, isbn, description, categoryId, authorsIds, imageId } = data;
+
+
+  const image = imageId 
+    ? await Image.findOne({ uuid: imageId }, {select: ['id']})
+    : undefined;
 
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId}, {select: ['id']})
@@ -84,10 +96,10 @@ export const create = async (data: BookPostData) => {
   const book = Book.create({
     name,
     isbn,
-    imageUrl,
     description,
     category,
-    authors
+    authors,
+    image
   });
 
   await book.save();

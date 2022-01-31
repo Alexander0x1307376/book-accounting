@@ -8,16 +8,16 @@ import validatorMiddleware from '../middlewares/validatorMiddleware'
 import authController from '../features/auth/authController';
 import authMiddleware from '../features/auth/authMiddleware';
 import upload from '../features/fileUploader/uploadMiddleware';
+import imageController from '../features/image/imageController';
 
 
 const router = express.Router();
 
 
 
-router.post('/upload', upload.single('image'), (req, res) => {
-  const path = req.file?.path;
-  res.json({ path });
-});
+router.post('/upload-image', upload.single('image'), imageController.upload);
+
+
 
 router.post('/registration', authController.register);
 router.post('/login', authController.login);

@@ -13,6 +13,7 @@ const BookDetails: FC = () => {
     uuid: id!,
     withAuthors: true,
     withCategory: true,
+    withImage: true,
   });
 
   const labelStyle: CSSProperties = {
@@ -22,6 +23,11 @@ const BookDetails: FC = () => {
     fontSize: '1.1rem',
     fontWeight: 400
   }
+
+
+  const imagePath = 'http://localhost:8000/' + data?.image?.path;
+  console.log('imagePath', imagePath);
+  console.log('data', data);
 
   return (
     <EntityDetailsLayout
@@ -40,12 +46,23 @@ const BookDetails: FC = () => {
         column={1}
       >
         <Item label='Код'>{data?.uuid}</Item>
-        <Item label='Изображение'>
-          <Image
-            width={200}
-            src={'http://localhost:8000/' + data?.imageUrl}
-          />
-        </Item>
+
+        {
+          data?.image
+          ? (
+              <Item label='Изображение'>
+                <Image
+                  width={200}
+                  src={imagePath}
+                />
+              </Item>
+          )
+          : (<Item label='Изображение'>
+            Нет
+          </Item>)
+        }
+        
+        
         
         <Item label='Имя'>{data?.name}</Item>
         <Item label='Категория'>

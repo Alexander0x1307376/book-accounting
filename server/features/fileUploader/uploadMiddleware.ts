@@ -1,5 +1,5 @@
 import multer from 'multer';
-import path from 'path';
+
 
 const fileFilter = (req: any, file: any, cb: any) => {
   const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -13,12 +13,8 @@ const storage = multer.diskStorage({
     cb(null, 'images/');
   },
   filename: function (req, file, cb) {
-
-    console.log('file?!', file);
-
     const uniqueSuffix = Date.now();
     const format = file.originalname.match(/\.\w+$/)?.[0] || '';
-
     cb(null, file.fieldname + '_' + uniqueSuffix + format);
   }
 });

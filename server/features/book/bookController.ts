@@ -8,14 +8,16 @@ import { BookPostData } from './bookTypes';
 type ShowQueryParams = {
   withAuthors?: boolean;
   withCategory?: boolean;
+  withImage?: boolean;
 }
 
 export default {
 
   show: cf(async (req, res) => {
     const { id } = req.params;
-    const { withAuthors, withCategory } = <ShowQueryParams>req.query;
-    const result = await bookService.getItem(id, { withAuthors, withCategory });
+    const { withAuthors, withCategory, withImage } = <ShowQueryParams>req.query;
+    // const result = await bookService.getItem(id, { withAuthors, withCategory });
+    const result = await bookService.getItem(id, req.query);
     res.json(result);
   }),
 
