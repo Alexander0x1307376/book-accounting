@@ -4,12 +4,14 @@ import { useCreateBookMutation } from "../../store/services/booksApi";
 import { BookInput } from "../../types";
 import EditBookForm from "../shared/forms/editBookForm";
 import EditEntityLayout from "../shared/editEntityLayout";
+import { useForm } from "antd/lib/form/Form";
 
 
 const BookCreate: React.FC = () => {
 
   const [createAuthor, { error }] = useCreateBookMutation();
   const navigate = useNavigate();
+  const [form] = useForm();
 
   const handleSubmit = async (values: BookInput) => {
     try {
@@ -27,6 +29,7 @@ const BookCreate: React.FC = () => {
       error={error}
     >
       <EditBookForm 
+        form={form}
         formLayout={'vertical'} 
         onSubmit={handleSubmit} 
       />

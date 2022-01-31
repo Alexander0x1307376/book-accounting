@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import jwtDecode from 'jwt-decode';
 import { User } from '../types';
 import {checkTokenExpiration} from '../utils/authUtils';
 import { RootState } from './store';
@@ -25,8 +24,6 @@ const getUserFromLocalStorage = (): UserState | undefined => {
   if (checkExpiration) {
     return undefined;
   }
-
-  console.log('getUserFromLocalStorage', userData);
 
   return userData;
 }

@@ -15,15 +15,14 @@ const PopoverFix = createGlobalStyle`
   }
 `;
 
-ReactDOM.render(
-  <React.StrictMode>
+ReactDOM.render(<>
     <PopoverFix />
     <BrowserRouter>
       <Provider store={store}>
         <App />
       </Provider>
     </BrowserRouter>
-  </React.StrictMode>
+</>
   ,
   document.getElementById('root')
 );

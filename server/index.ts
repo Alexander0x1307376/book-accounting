@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import errorMiddleware from './middlewares/errorMiddleware';
 import { createConnection } from 'typeorm';
 import { queryParser } from 'express-query-parser';
+import path from 'path';
 
 export const app = express();
 
@@ -21,6 +22,7 @@ app.use(queryParser({
   parseBoolean: true,
   parseNumber: true
 }));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(router);
 app.use(errorMiddleware);
 
@@ -38,19 +40,3 @@ const start = async () => {
 
 
 createConnection().then(start);
-
-// createConnection({
-//   type: 'postgres',
-//   host: '127.0.0.1',
-//   port: parseInt(process.env.DB_PORT || '5432'), //по-другому не хочет становиться числом
-//   username: process.env.DB_USER,
-//   password: process.env.DB_PASSWORD,
-//   database: process.env.DB_DATABASE,
-//   synchronize: true,
-//   logging: false,
-//   // seeds: ['database/seeds/**/*{.ts,.js}'],
-//   // factories: ['database/factories/**/*{.ts,.js}'],
-//   entities: [
-//     __dirname + '/entity/*.ts'
-//   ]
-// }).then(start);

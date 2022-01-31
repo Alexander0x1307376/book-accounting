@@ -1,7 +1,7 @@
 import React, { FC, CSSProperties } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ButtonRouterLink from '../shared/buttonRouterLink';
-import { Descriptions, Typography, List } from 'antd';
+import { Descriptions, Typography, List, Image } from 'antd';
 import { useBookDetailsQuery } from '../../store/services/booksApi';
 import EntityDetailsLayout from '../shared/entityDetailsLayout';
 
@@ -40,6 +40,13 @@ const BookDetails: FC = () => {
         column={1}
       >
         <Item label='Код'>{data?.uuid}</Item>
+        <Item label='Изображение'>
+          <Image
+            width={200}
+            src={'http://localhost:8000/' + data?.imageUrl}
+          />
+        </Item>
+        
         <Item label='Имя'>{data?.name}</Item>
         <Item label='Категория'>
           <Link to={`/categories/${data?.category?.uuid}`}>

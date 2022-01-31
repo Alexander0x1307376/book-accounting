@@ -31,7 +31,11 @@ export const routes: RouteObject[] = [
   },
   {
     path: '/',
-    element: <AuthRoute><Main /></AuthRoute>,
+    element: (
+      // <AuthRoute>
+        <Main />
+      // </AuthRoute>
+    ),
     children: [
       {
         index: true,

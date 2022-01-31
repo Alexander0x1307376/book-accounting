@@ -68,7 +68,7 @@ export const getItem = async (
 
 export const create = async (data: BookPostData) => {
 
-  const { name, isbn, description, categoryId, authorsIds } = data;
+  const { name, isbn, description, categoryId, authorsIds, imageUrl } = data;
 
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId}, {select: ['id']})
@@ -84,6 +84,7 @@ export const create = async (data: BookPostData) => {
   const book = Book.create({
     name,
     isbn,
+    imageUrl,
     description,
     category,
     authors

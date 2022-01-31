@@ -7,9 +7,17 @@ import authorValidationRules from '../features/author/authorValidator';
 import validatorMiddleware from '../middlewares/validatorMiddleware'
 import authController from '../features/auth/authController';
 import authMiddleware from '../features/auth/authMiddleware';
+import upload from '../features/fileUploader/uploadMiddleware';
+
 
 const router = express.Router();
 
+
+
+router.post('/upload', upload.single('image'), (req, res) => {
+  const path = req.file?.path;
+  res.json({ path });
+});
 
 router.post('/registration', authController.register);
 router.post('/login', authController.login);
@@ -18,105 +26,108 @@ router.get('/refresh', authController.refreshToken);
 
 
 
-router.get('/users/:page', authMiddleware, userController.list);
-router.post('/user/create', authMiddleware, userController.create);
-router.post('/user/:id/edit', authMiddleware, userController.edit);
-router.post('/user/:id/delete', authMiddleware, userController.remove);
-router.get('/user/:id', authMiddleware, userController.show);
+router.get('/users/:page', /*authMiddleware,*/ userController.list);
+router.post('/user/create', /*authMiddleware,*/ userController.create);
+router.post('/user/:id/edit', /*authMiddleware,*/ userController.edit);
+router.post('/user/:id/delete', /*authMiddleware,*/ userController.remove);
+router.get('/user/:id', /*authMiddleware,*/ userController.show);
 
 
-
+// #region Категории
 router.get('/categories/root', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.root
 );
 router.get('/categories/search', 
-  authMiddleware, 
+  /*authMiddleware,*/ 
   categoryController.search
 );
 router.get('/categories/:page', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.list
 );
 router.post('/category/create', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.create
 );
 router.post('/category/:id/edit', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.edit
 );
 router.delete('/category/:id/delete', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.remove
 );
 router.get('/category/:id/books', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.categoryWithBooks
 );
 router.get('/category/:id/children', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.categoryChildren
 );
 router.get('/category/:id', 
-  authMiddleware,
+  /*authMiddleware,*/
   categoryController.show
 );
+// #endregion
 
 
-
+// #region Книги
 router.get('/books/:page', 
   bookController.list,
-  authMiddleware,
+  /*authMiddleware,*/
 );
 router.post('/book/create', 
-  authMiddleware, 
+  upload.single('image'),
+  /*authMiddleware,*/ 
   bookController.create
 );
 router.post('/book/:id/edit', 
-  authMiddleware, 
+  /*authMiddleware,*/ 
   bookController.edit
 );
 router.delete('/book/:id/delete', 
-  authMiddleware, 
+  /*authMiddleware,*/ 
   bookController.remove
 );
 router.get('/book/:id', 
-  authMiddleware, 
+  /*authMiddleware,*/ 
   bookController.show
 );
+// #endregion
 
 
-
+// #region Акторы
 router.post('/author/create', 
   authorValidationRules(), 
   validatorMiddleware, 
-  authMiddleware,
+  /*authMiddleware,*/
   authorController.create
 );
 router.post('/author/:id/edit', 
   authorValidationRules(), 
   validatorMiddleware, 
-  authMiddleware,
+  /*authMiddleware,*/
   authorController.edit
 );
 router.delete('/author/:id/delete', 
-  authMiddleware,
+  /*authMiddleware,*/
   authorController.remove
 );
 router.get('/author/:id',
-  authMiddleware, 
+  /*authMiddleware,*/ 
   authorController.show
 );
 router.get('/authors/search', 
-  authMiddleware,
+  /*authMiddleware,*/
   authorController.search
 );
 router.get('/authors/:page', 
-  authMiddleware,
+  /*authMiddleware,*/
   authorController.list
 );
-
+// #endregion
 
 
 export default router;

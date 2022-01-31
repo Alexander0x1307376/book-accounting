@@ -22,6 +22,8 @@ export default {
 
   create: cf(async (req, res) => {
     const data = <BookPostData>req.body;
+    console.log('bookData', data);
+    // console.log('bookFile', req.file);
     const result = await bookService.create(data);
     res.json(result);
   }),

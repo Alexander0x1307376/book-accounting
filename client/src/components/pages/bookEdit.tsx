@@ -35,15 +35,15 @@ const BookEdit: React.FC = () => {
   };
 
 
-  // зачем?!
   const initialData: FullBookInput | undefined = (isLoading || !bookDetails) 
     ? undefined : {
       isbn: bookDetails.isbn,
       name: bookDetails.name,
+      imageUrl: bookDetails.imageUrl,
       description: bookDetails.description,
       category: bookDetails.category,
       authors: bookDetails.authors
-    }
+    };
 
 
   return (
