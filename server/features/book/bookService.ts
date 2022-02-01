@@ -110,7 +110,11 @@ export const create = async (data: BookPostData) => {
 
 export const edit = async (bookUuid: string, data: BookPostData) => {
 
-  const { name, isbn, description, categoryId, authorsIds } = data;
+  const { name, isbn, description, categoryId, authorsIds, imageId } = data;
+
+  const image = imageId
+    ? await Image.findOne({ uuid: imageId }, { select: ['id'] })
+    : undefined;
 
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId }, { select: ['id'] })
@@ -130,7 +134,8 @@ export const edit = async (bookUuid: string, data: BookPostData) => {
     isbn,
     description,
     category,
-    authors
+    authors,
+    image
   });
 
   await book.save();

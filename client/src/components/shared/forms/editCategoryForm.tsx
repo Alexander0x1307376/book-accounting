@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Form, Button, Input, FormInstance } from "antd";
 import { CategoryInput as CategoryInputType, FullCategoryInput } from "../../../types";
-import CategoryInput from "../relationField/categoryInput";
+import CategoryInput from "../complexInputFields/categoryInput";
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
 

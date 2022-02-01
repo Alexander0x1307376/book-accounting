@@ -24,10 +24,8 @@ const BookDetails: FC = () => {
     fontWeight: 400
   }
 
-
+  // TODO: убрать
   const imagePath = 'http://localhost:8000/' + data?.image?.path;
-  console.log('imagePath', imagePath);
-  console.log('data', data);
 
   return (
     <EntityDetailsLayout

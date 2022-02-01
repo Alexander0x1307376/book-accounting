@@ -23,49 +23,49 @@ import AuthRoute from '../components/shared/authRoute';
 export const routes: RouteObject[] = [
   {
     path: '/login',
-    element: <Login />,
+    element: <Login key="login" />,
   },
   {
     path: '/logout',
-    element: <Navigate to="/login" />,
+    element: <Navigate key="nav_login" to="/login" />,
   },
   {
     path: '/',
     element: (
       // <AuthRoute>
-        <Main />
+      <Main key="main" />
       // </AuthRoute>
     ),
     children: [
       {
         index: true,
         path: '/',
-        element: <Dashboard />,
+        element: <Dashboard key="dashboard" />,
       },
       // Автор
       {
         path: 'authors',
-        element: <Navigate to="/authors/1" />
+        element: <Navigate key="nav_authors" to="/authors/1" />
       },
       {
         path: 'authors/:page',
-        element: <Authors />,
+        element: <Authors key="authors" />,
         children: [
           {
             path: '/authors/:page',
-            element: <Empty />,
+            element: <Empty key="authors_empty" />,
           },
           {
             path: 'create',
-            element: <AuthorCreate />,
+            element: <AuthorCreate key="author_create" />,
           },
           {
             path: ':id/edit',
-            element: <AuthorEdit />,
+            element: <AuthorEdit key="author_edit" />,
           },
           {
             path: ':id',
-            element: <AuthorDetails />,
+            element: <AuthorDetails key="author_details" />,
           },
         ]
       },
@@ -73,77 +73,77 @@ export const routes: RouteObject[] = [
       // Книги
       {
         path: 'books',
-        element: <Navigate to="/books/1" />
+        element: <Navigate key="nav_books"  to="/books/1" />
       },
       {
         path: 'books/:page',
-        element: <Books />,
+        element: <Books key="books" />,
         children: [
           {
             path: '/books/:page',
-            element: <Empty />,
+            element: <Empty key="books_empty" />,
           },
           {
             path: 'create',
-            element: <BookCreate />,
+            element: <BookCreate key="book_create" />,
           },
           {
             path: ':id/edit',
-            element: <BookEdit />,
+            element: <BookEdit key="book_edit" />,
           },
           {
             path: ':id',
-            element: <BookDetails />,
+            element: <BookDetails key="book_details" />,
           },
         ]
       },
       // Категории
       {
         path: 'categories',
-        element: <Navigate to="/categories/1" />
+        element: <Navigate to="/categories/1" key="nav_categories" />
       },
       {
         path: 'categories/:page',
-        element: <Categories />,
+        element: <Categories key="categories" />,
         children: [
           {
             path: '/categories/:page',
-            element: <Empty />,
+            element: <Empty key="categories_empty" />,
           },
           {
             path: 'create',
-            element: <CategoryCreate />,
+            element: <CategoryCreate key="category_create" />,
           },
           {
             path: ':id/edit',
-            element: <CategoryEdit />,
+            element: <CategoryEdit key="category_edit" />,
           },
           {
             path: ':id',
-            element: <CategoryDetails />,
+            element: <CategoryDetails key="category_details" />,
           },
         ]
       },
       // Пользователи
       {
         path: 'users',
-        element: <Navigate to="/users/1" />
+        element: <Navigate to="/users/1" key="nav_users" />
       },
       {
         path: 'users/:page',
-        element: <Users />,
+        element: <Users key="users" />,
         children: [
           {
             path: '/users/:page',
-            element: <Empty />,
+            element: <Empty key="users_empty" />,
           },
           {
             path: ':id',
-            element: <UserDetails />,
+            element: <UserDetails key="user_details" />,
           },
           {
             path: ':id/edit',
-            element: <UserEdit />
+            element: <UserEdit key="user_edit" />
           },
         ]
       },

@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BookInput, FullBookInput } from "../../../types";
-import { Form, Input, Button, FormInstance, Upload, message } from "antd";
-import CategoryInput from "../relationField/categoryInput";
-import AuthorsInput from "../relationField/authorsInput";
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { UploadChangeParam } from "antd/lib/upload";
+import { Form, Input, Button, FormInstance } from "antd";
+import CategoryInput from "../complexInputFields/categoryInput";
+import AuthorsInput from "../complexInputFields/authorsInput";
+import UploadImage from "../complexInputFields/uploadImage";
 
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
@@ -17,23 +16,6 @@ interface EditBookFormProps {
   withoutSubmitButton?: boolean;
   form?: FormInstance<any>;
 }
-
-
-
-const beforeUpload = (file: any) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
-  if (!isJpgOrPng) {
-    message.error('Только файлы в формате PNG или JPG!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Только изображения меньше 2MB!');
-  }
-  return isJpgOrPng && isLt2M;
-};
-
-const baseUrl = 'http://localhost:8000/';
-const uploadUrl = baseUrl + 'upload-image';
 
 
 const EditBookForm: React.FC<EditBookFormProps> = ({
@@ -55,11 +37,9 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
   // #endregion
 
   const [imageData, setImageData] = useState<any>([]);
-  const isImageLoading = useMemo(() => imageData[0]?.status === 'uploading', [imageData]);
 
-  const handleChange = (info: UploadChangeParam<any>) => {
-    setImageData(info.fileList);
-  }
+  // TODO: убрать
+  const baseUrl = 'http://localhost:8000/';
 
   const onFinish = (values: any): void => {
     const submitData = {
@@ -100,13 +80,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
 
   }, [recordData, form]);
 
-
-  const uploadButton = (
-    <div>
-      {isImageLoading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Загрузить</div>
-    </div>
-  );
+  console.log('imageData', imageData);
 
   return (
     <Form
@@ -119,17 +93,10 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
         label="Изображение"
         name="imageUrl"
       >
-        <Upload 
-          name="image"
-          listType="picture-card"
-          action={uploadUrl}
-          beforeUpload={beforeUpload}
-          onChange={handleChange}
-          fileList={imageData}
-          onRemove={() => setImageData([])}
-        >
-          { !imageData.length && uploadButton }
-        </Upload>
+        <UploadImage 
+          imageValue={imageData} 
+          onChange={(value) => setImageData(value)} 
+        />
       </Form.Item>
 
       <Form.Item

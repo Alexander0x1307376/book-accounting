@@ -1,5 +1,5 @@
 import { Input } from "antd"
-import CategoryInput from "../../components/shared/relationField/categoryInput"
+import CategoryInput from "../../components/shared/complexInputFields/categoryInput"
 
 const defaultEtityViewData: EntityViewData = {
   titles: {
