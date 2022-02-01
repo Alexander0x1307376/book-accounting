@@ -50,7 +50,7 @@ export const create = async ({name, description, parentId}: CategoryPostData) =>
 
   const parent = parentId
     ? await Category.findOne({ uuid: parentId }, { select: ['id'] })
-    : undefined;
+    : null;
 
   const category = Category.create({
     name,

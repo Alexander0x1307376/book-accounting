@@ -16,7 +16,7 @@ export const getList = async (page: number, rowsPerPage = 10) => {
       page,
       rowsPerPage,
       order: {
-        createdAt: 'DESC'
+        updatedAt: 'DESC'
       }
     }
   );
@@ -114,11 +114,11 @@ export const edit = async (bookUuid: string, data: BookPostData) => {
 
   const image = imageId
     ? await Image.findOne({ uuid: imageId }, { select: ['id'] })
-    : undefined;
+    : null;
 
   const category = categoryId
     ? await Category.findOne({ uuid: categoryId }, { select: ['id'] })
-    : undefined;
+    : null;
 
   const authors = authorsIds
     ? await Author.find({
@@ -137,6 +137,8 @@ export const edit = async (bookUuid: string, data: BookPostData) => {
     authors,
     image
   });
+
+  console.log('editedBook', book);
 
   await book.save();
 
