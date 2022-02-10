@@ -13,10 +13,11 @@ const AuthRoute: React.FC<AuthRouteProps> = ({ children }) => {
   const location = useLocation();
 
 
-  const isRefreshTokenExpired = useMemo(() => 
-    auth.user.refreshToken 
+  const isRefreshTokenExpired = useMemo(() => {
+    return auth.user.refreshToken 
     ? checkTokenExpiration(auth.user.refreshToken)
     : true
+  }
   , [checkTokenExpiration, auth]);
   
 

@@ -13,7 +13,6 @@ type BookDetailsParams = {
 
 export const booksApi = createApi({
   reducerPath: 'booksApi',
-  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Book'],
   endpoints: build => ({
@@ -56,7 +55,7 @@ export const booksApi = createApi({
       query: ({id, data}) => {
         return {
           url: `book/${id}/edit`,
-          method: 'POST',
+          method: 'PUT',
           body: data
         }
       },

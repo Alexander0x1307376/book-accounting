@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button,  Table, TableProps } from "antd";
+import { Alert, Button,  Table, TablePaginationConfig, TableProps } from "antd";
 import RecordActionButtons, { RecordActionButtonsProps } from "./recordActionButtons";
 
 type Headers = {
@@ -27,7 +27,8 @@ export interface AdvancedTableProps {
     currentPage: number,
     pageSize: number,
     total: number,
-    onChange: (page: number) => void
+    onChange: (page: number) => void,
+    position?: TablePaginationConfig['position']
   };
   actionClickHandlers?: {
     detailsClick?: (id: string) => void,
@@ -36,6 +37,7 @@ export interface AdvancedTableProps {
   };
 }
 
+// TODO: убрать дичь в определении параметров таблицы
 const AdvancedTable: React.FC<AdvancedTableProps> = ({ 
   tableProps,
   rowsList,
@@ -76,7 +78,6 @@ const AdvancedTable: React.FC<AdvancedTableProps> = ({
         }
       />
       : <Table 
-        {...tableProps}
         rowKey={recordIdentifier || "id"}
         columns={[...headers, actions]}
         dataSource={rowsList}
@@ -85,8 +86,10 @@ const AdvancedTable: React.FC<AdvancedTableProps> = ({
           current: pagination.currentPage,
           pageSize: pagination.pageSize,
           total: pagination.total,
+          position: ['topRight', 'bottomRight'],
           onChange: (page: number) => pagination.onChange(page),
-        }: undefined}
+        } : false}
+        {...tableProps}
       />
     }
   </>

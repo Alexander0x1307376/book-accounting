@@ -1,21 +1,19 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useBooksQuery, useDeleteBookMutation } from '../../store/services/booksApi';
+import changeListPage from '../../utils/changeListPage';
 import CrudLayout from '../shared/crudLayout';
 
 
 const Books: FC = () => {
   const { id } = useParams<any>();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data, error, isLoading, refetch } = useBooksQuery(currentPage);
 
-  const requestError = error as any;
-
-  const navigate = useNavigate();
-
   const [ deleteBook ] = useDeleteBookMutation();
-
 
   return (
     <CrudLayout
@@ -23,6 +21,18 @@ const Books: FC = () => {
       createLink="create"
       createButtonText="Добавить книгу"
       tableProps={{
+        pagination: {
+          showSizeChanger: false,
+          position: ['topRight', 'bottomRight'],
+          current: data?.page || 1,
+          pageSize: data?.rowsPerPage || 1,
+          total: data?.total || 1,
+          onChange: (changedPage) => {
+            const newUrl = changeListPage(location.pathname, changedPage);
+            setCurrentPage(changedPage);
+            navigate(newUrl);
+          }
+        },
         rowSelection: {
           type: 'radio',
           selectedRowKeys: [id] as React.Key[],
@@ -32,15 +42,6 @@ const Books: FC = () => {
       }}
       isLoading={isLoading}
       data={data?.list || []}
-      pagination={{
-        currentPage: data?.page || 1,
-        pageSize: data?.rowsPerPage || 1,
-        total: data?.total || 1,
-        onChange: (changedPage) => {
-          window.history.replaceState(null, '', `${changedPage}`);
-          setCurrentPage(changedPage);
-        }
-      }}
       getListError={error ? {
         title: 'Ошибка!',
         details: 'Не удалось загрузить данные книг',

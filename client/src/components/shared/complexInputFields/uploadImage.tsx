@@ -2,6 +2,7 @@ import { message, Upload } from 'antd';
 import { UploadChangeParam } from 'antd/lib/upload';
 import React, { useMemo, useState } from 'react';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { BASE_API_URL } from '../../../constants/server';
 
 
 
@@ -27,8 +28,7 @@ const UploadImage: React.FC<UploadImageProps> = ({ imageValue = [], onChange}) =
   // const [imageData, setImageData] = useState<any>([]);
   const isImageLoading = useMemo(() => imageValue[0]?.status === 'uploading', [imageValue]);
 
-  const baseUrl = 'http://localhost:8000/';
-  const uploadUrl = baseUrl + 'upload-image';
+  const uploadUrl = BASE_API_URL + 'upload-image';
 
   const uploadButton = (
     <div>
@@ -36,8 +36,6 @@ const UploadImage: React.FC<UploadImageProps> = ({ imageValue = [], onChange}) =
       <div style={{ marginTop: 8 }}>Загрузить</div>
     </div>
   );
-
-  console.log('value', imageValue);
 
   return (
     <Upload

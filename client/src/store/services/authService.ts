@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import jwtDecode from "jwt-decode";
+import { BASE_API_URL } from "../../constants/server";
 import { LoginRequest, LoginResponse } from "../../types";
 import { clearUserData, setUserData } from "../../utils/authUtils";
 import { clearUser, setUser } from "../authSlice";
@@ -10,7 +10,7 @@ import { RootState } from "../store";
 export const authApi = createApi({
   reducerPath: 'loginApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8000/',
+    baseUrl: BASE_API_URL,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.accessToken;
       if (token) {

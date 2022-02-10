@@ -4,6 +4,7 @@ import ButtonRouterLink from '../shared/buttonRouterLink';
 import { Descriptions, Typography, List, Image } from 'antd';
 import { useBookDetailsQuery } from '../../store/services/booksApi';
 import EntityDetailsLayout from '../shared/entityDetailsLayout';
+import { BASE_API_URL } from '../../constants/server';
 
 const { Item } = Descriptions;
 
@@ -24,8 +25,7 @@ const BookDetails: FC = () => {
     fontWeight: 400
   }
 
-  // TODO: убрать
-  const imagePath = 'http://localhost:8000/' + data?.image?.path;
+  const imagePath = BASE_API_URL + data?.image?.path;
 
   return (
     <EntityDetailsLayout

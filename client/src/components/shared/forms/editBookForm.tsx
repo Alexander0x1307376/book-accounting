@@ -4,6 +4,8 @@ import { Form, Input, Button, FormInstance } from "antd";
 import CategoryInput from "../complexInputFields/categoryInput";
 import AuthorsInput from "../complexInputFields/authorsInput";
 import UploadImage from "../complexInputFields/uploadImage";
+import { UploadFile } from "antd/lib/upload/interface";
+import { BASE_API_URL } from "../../../constants/server";
 
 
 type LayoutType = Parameters<typeof Form>[0]['layout'];
@@ -16,7 +18,6 @@ interface EditBookFormProps {
   withoutSubmitButton?: boolean;
   form?: FormInstance<any>;
 }
-
 
 const EditBookForm: React.FC<EditBookFormProps> = ({
   recordData,
@@ -38,21 +39,6 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
 
   const [imageData, setImageData] = useState<any>([]);
 
-  // TODO: убрать
-  const baseUrl = 'http://localhost:8000/';
-
-  const onFinish = (values: any): void => {
-    const submitData = {
-      isbn: values.isbn,
-      name: values.name,
-      imageId: imageData[0].response.uuid,
-      description: values.description,
-      categoryId: values.category.value,
-      authorsIds: values.authors.map(({ value }: any) => value)
-    };
-    onSubmit?.(submitData);
-  };
-
   useEffect(() => {
 
     if(recordData?.image) 
@@ -60,7 +46,7 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
         uid: '-1',
         name: recordData.image.path,
         status: 'done',
-        url: baseUrl + recordData.image.path
+        url: BASE_API_URL + recordData.image.path
       }]);
 
 
@@ -80,7 +66,38 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
 
   }, [recordData, form]);
 
-  console.log('imageData', imageData);
+
+  const setImageUuid = ([imageState]: UploadFile[]) => {
+    if (!imageState || imageState?.status === 'removed') {
+      return undefined;
+    } 
+      
+    if (imageState?.status === 'done') {
+      if (!imageState?.response) {
+        return recordData?.image?.uuid;
+      }
+      else {
+        return imageState?.response.uuid;
+      }
+    }
+    
+    return undefined;
+  }
+
+  const onFinish = (values: any): void => {
+
+    const submitData = {
+      isbn: values.isbn,
+      name: values.name,
+      imageId: setImageUuid(imageData),
+      description: values.description,
+      categoryId: values.category?.value,
+      authorsIds: values.authors.map(({ value }: any) => value)
+    };
+
+    // console.log('editBookSubmit', submitData);
+    onSubmit?.(submitData);
+  };
 
   return (
     <Form
@@ -95,7 +112,9 @@ const EditBookForm: React.FC<EditBookFormProps> = ({
       >
         <UploadImage 
           imageValue={imageData} 
-          onChange={(value) => setImageData(value)} 
+          onChange={(value) => {
+            setImageData(value);
+          }} 
         />
       </Form.Item>
 

@@ -4,7 +4,6 @@ import { baseQueryWithReauth } from '../utils/reauthBaseQuery';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
   baseQuery: baseQueryWithReauth,
   tagTypes: ['User'],
   endpoints: build => ({
@@ -52,7 +51,7 @@ export const usersApi = createApi({
     editUser: build.mutation<any, { id: string, data: UserInput }>({
       query: ({id, data}) => ({
         url: `user/${id}/edit`,
-        method: 'POST',
+        method: 'PUT',
         body: data
       }),
       invalidatesTags: ['User']

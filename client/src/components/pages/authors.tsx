@@ -1,36 +1,9 @@
 import React, { FC, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuthorsQuery, useDeleteAuthorMutation } from '../../store/services/authorsApi';
+import changeListPage from '../../utils/changeListPage';
 import CrudLayout from '../shared/crudLayout';
 
-
-// const columns = [
-//   {
-//     key: 'name',
-//     dataIndex: 'name',
-//     title: 'Имя'
-//   },
-//   {
-//     key: 'birthDate',
-//     dataIndex: 'birthDate',
-//     title: 'Дата рождения'
-//   },
-//   {
-//     key: 'deathDate',
-//     dataIndex: 'deathDate',
-//     title: 'Дата смерти'
-//   },
-//   {
-//     key: 'createdAt',
-//     dataIndex: 'createdAt',
-//     title: 'Дата создания'
-//   },
-//   {
-//     key: 'updatedAt',
-//     dataIndex: 'updatedAt',
-//     title: 'Дата обновления'
-//   },
-// ];
 
 const Authors: FC = () => {
 
@@ -39,6 +12,7 @@ const Authors: FC = () => {
   const { data, error, isLoading, refetch } = useAuthorsQuery(currentPage);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
 
   const [ deleteAuthor ] = useDeleteAuthorMutation();
@@ -48,7 +22,6 @@ const Authors: FC = () => {
     title="Авторы"
     createLink="create"
     createButtonText="Добавить автора"
-    // tableHeaders={columns}
     tableProps={{
       rowSelection: {
         type: 'radio',
@@ -64,7 +37,9 @@ const Authors: FC = () => {
       pageSize: data?.rowsPerPage || 1,
       total: data?.total || 1,
       onChange: (changedPage) => {
+        const newUrl = changeListPage(location.pathname, changedPage);
         setCurrentPage(changedPage);
+        navigate(newUrl);
       }
     }}
     getListError={error ? {

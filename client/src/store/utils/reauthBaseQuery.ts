@@ -7,9 +7,10 @@ import {
 import { RootState } from '../store';
 import { setUser, clearUser, UserState } from '../authSlice';
 import { clearUserData, getUserFromLocalStorage, setUserData } from '../../utils/authUtils';
+import { BASE_API_URL } from '../../constants/server';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:8000/',
+  baseUrl: BASE_API_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     if (token) {

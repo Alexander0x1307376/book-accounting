@@ -12,7 +12,6 @@ type CategoryDetailsParams = {
 
 export const categoriesApi = createApi({
   reducerPath: 'categoriesApi',
-  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000' }),
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Category'],
   endpoints: build => ({
@@ -77,7 +76,7 @@ export const categoriesApi = createApi({
     editCategory: build.mutation<CategoryRecord, {id: string, data: CategoryInput}>({
       query: ({id, data}) => ({
         url: `category/${id}/edit`,
-        method: 'POST',
+        method: 'PUT',
         body: data
       }),
       invalidatesTags: ['Category']
