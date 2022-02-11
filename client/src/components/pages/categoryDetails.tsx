@@ -4,10 +4,13 @@ import ButtonRouterLink from '../shared/buttonRouterLink';
 import { Descriptions } from 'antd';
 import { useCategoryDetailsQuery } from '../../store/services/categoriesApi';
 import EntityDetailsLayout from '../shared/entityDetailsLayout';
+
+
 const { Item } = Descriptions;
 
 const CategoryDetails: FC = () => {
   const { id } = useParams<any>();
+
   const { data, isLoading } = useCategoryDetailsQuery({uuid: id!, withParent: true});
 
   const labelStyle: CSSProperties = {

@@ -20,7 +20,7 @@ export default {
   login: cf(async (req, res) => {
     const {login, password} = req.body;
     const result = await authService.login(login, password);
-    res.cookie('refreshToken', result.refreshToken, defaultCookieSettings);
+    // res.cookie('refreshToken', result.refreshToken, defaultCookieSettings);
 
     res.json(result);
   }),

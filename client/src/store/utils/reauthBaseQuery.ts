@@ -21,6 +21,8 @@ const baseQuery = fetchBaseQuery({
   credentials: 'same-origin'
 });
 
+// костыль, не позволяющий делать два запроса refresh один за другим
+let allowRefresh = true;
 
 // Пока что рефреши работают через заголовки
 export const baseQueryWithReauth: BaseQueryFn<
@@ -31,7 +33,12 @@ export const baseQueryWithReauth: BaseQueryFn<
   // args - url, method и пр., api - getState, dispatch и пр.
 
   let result = await baseQuery(args, api, extraOptions);
-  if (result.error && result.error.status === 401) {
+  if (result.error && result.error.status === 401 && allowRefresh) {
+
+    // костыль в работе
+    allowRefresh = false;
+    setTimeout(() => { allowRefresh = true; }, 500);
+
     // получаем новый токен
     // const refreshResult = await baseQuery('/refresh', api, extraOptions);
     const refreshResult = await baseQuery({

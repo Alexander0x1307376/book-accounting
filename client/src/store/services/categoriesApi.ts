@@ -104,7 +104,9 @@ export const {
   useCreateCategoryMutation,
   useEditCategoryMutation,
   useLazyCategoryChildrenQuery,
-  useDeleteCategoryMutation
+  useLazyCategoryDetailsQuery,
+  useDeleteCategoryMutation,
+  usePrefetch
 } = categoriesApi;
 
 export const {

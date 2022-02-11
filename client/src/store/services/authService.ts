@@ -43,14 +43,6 @@ export const authApi = createApi({
         dispatch(clearUser());
       }
     }),
-    // refresh: build.query<any, any>({
-    //   query: () => 'refresh',
-    //   onQueryStarted: async (id, { dispatch, queryFulfilled }) => {
-    //     const { data } = await queryFulfilled;
-    //     setUserData(data);
-    //     dispatch(setUser(data));
-    //   }
-    // })
   })
 });
 

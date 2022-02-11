@@ -55,6 +55,7 @@ const Categories: FC = () => {
       tableProps={{
         expandable: {
           onExpand: (expanded, record) => {
+            console.log('categories?!', categories)
             fetchChildren(record.key);
           }
         },
